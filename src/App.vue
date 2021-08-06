@@ -1,10 +1,24 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="container">
+    {{$store.state.user.profile.nickname}}
   </div>
-  <router-view/>
+  <button @click="changeName">change</button>
 </template>
+<script>
+import { useStore } from 'vuex'
+export default {
+  name: 'App',
+  setup () {
+    const store = useStore()
+    function changeName () {
+      store.commit('user/setUser', { nickname: 'xiaoli' })
+    }
+    return {
+      changeName
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
@@ -13,18 +27,5 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>
