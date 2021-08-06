@@ -6,10 +6,12 @@
   mode="horizontal"
   @select="handleSelect"
   background-color="#333"
-  text-color="#CDCDCD">
+  text-color="#CDCDCD"
+  active-text-color="#CDCDCD"
+  >
   <template v-if="profile.token">
       <el-menu-item index="1">
-      <span class="iconfont icon-touxiang"></span>
+      <span class="iconfont icon-user"></span>
       <!-- {{profile.account}} -->
       <span>wogaf</span>
   </el-menu-item>
@@ -35,7 +37,7 @@
   <el-menu-item index="6">关于我们</el-menu-item>
   <span class="line">|</span>
   <el-menu-item index="7">
-      <span class="iconfont icon-shouji"></span>
+      <span class="iconfont icon-phone"></span>
       <span>手机版</span>
   </el-menu-item>
  </el-menu>
@@ -45,7 +47,7 @@
 
 <script>
 import { useStore } from 'vuex'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup () {
