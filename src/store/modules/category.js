@@ -15,12 +15,25 @@ export default {
   mutations: {
     setList (state, headCategory) {
       state.list = headCategory
+    },
+    show (state, id) {
+      const obj = state.list.find(item => item.id === id)
+      obj.open = open
+    },
+    hidden (state, id) {
+      const obj = state.list.find(item => item.id === id)
+      obj.open = false
     }
   },
   // 需要向后台加载数据，所以需要actions函数获取数据
   actions: {
     async getList ({ commit }) {
       const { result } = await findAllCategory()
+
+      result.forEach(top => {
+        top.open = false
+      })
+
       // 获取数据成功，提交mutations进行数据修改
       commit('setList', result)
     }

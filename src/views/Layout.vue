@@ -1,6 +1,8 @@
 <template>
     <!-- 顶部导航栏 -->
     <AppNav/>
+    <!-- 吸顶头部 -->
+    <AppHeaderSticky/>
     <!-- 头部组件 -->
    <AppHeader/>
     <!-- 内容容器 -->
@@ -15,12 +17,14 @@
 import AppNav from '@/components/app-nav.vue'
 import AppHeader from '@/components/app-header.vue'
 import AppFooter from '@/components/app-footer.vue'
+import AppHeaderSticky from '@/components/app-header-sticky.vue'
 export default {
   name: 'Layout',
   components: {
     AppNav,
     AppHeader,
-    AppFooter
+    AppFooter,
+    AppHeaderSticky
   }
 }
 </script>

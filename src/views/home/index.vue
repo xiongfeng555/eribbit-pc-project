@@ -1,11 +1,20 @@
 <template>
     <div class="container">
-        内容区
+        <!-- 左侧分类 -->
+        <HomeCategory/>
+        <!-- 轮播图 -->
     </div>
 </template>
-
-<style lang="scss" scoped>
-.container{
-    @include hoverShadow()
+<script>
+import HomeCategory from './home-category.vue'
+export default {
+  components: {
+    HomeCategory
+  }
 }
+</script>
+<style lang="scss" scoped>
+// .container{
+//     @include hoverShadow()
+// }
 </style>

@@ -2,18 +2,18 @@
   <ul class="app-header-nav">
       <!-- {{$store.state.category.list}} -->
     <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li v-for="item in $store.state.category.list" :key="item.id">
-      <a href="#">{{item.name}}</a>
-      <div class="layer">
+    <li v-for="item in $store.state.category.list" :key="item.id" @mouseenter="show(item.id)" @mouseleave="hidden(item.id)">
+      <router-link :to="`/category/${item.id}`" @click="hidden(item.id)">{{item.name}}</router-link>
+      <div class="layer" :class="{open:item.open}">
         <ul>
           <li v-for="i in item.children" :key="i.id">
-            <a href="#">
+            <router-link :to="`/category/sub/${i.id}`" @click="hidden(item.id)">
               <img
                 :src="i.picture"
                 alt=""
               />
               <p>{{i.name}}</p>
-            </a>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -26,6 +26,17 @@ export default {
   setup () {
     const store = useStore()
     store.dispatch('category/getList')
+
+    function show (id) {
+      store.commit('category/show', id)
+    }
+    function hidden (id) {
+      store.commit('category/hidden', id)
+    }
+    return {
+      show,
+      hidden
+    }
   }
 }
 </script>
@@ -51,15 +62,14 @@ export default {
         color: $xtxColor;
         border-bottom: 1px solid $xtxColor;
       }
-      // 显示二级分类
-      > .layer {
-        height: 132px;
-        opacity: 1;
-      }
     }
   }
 }
 .layer {
+  &.open{
+    height: 132px;
+    opacity: 1;
+  }
   width: 1240px;
   background-color: #fff;
   position: absolute;
