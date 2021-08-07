@@ -11,6 +11,11 @@
             >{{ sub.name }}</RouterLink
           >
         </template>
+        <template v-else>
+           <xtx-skeleton width="60px" height="18px" bg="rgba(255,255,255,.2)" style="margin-right:5px"/>
+           <xtx-skeleton width="60px" height="18px" bg="rgba(255,255,255,.2)"/>
+        </template>
+
       </li>
     </ul>
 
@@ -101,6 +106,7 @@ export default {
       padding-left: 40px;
       height: 50px;
       line-height: 50px;
+      position: relative;
       &:hover,&.active {
         background: $xtxColor;
       }
@@ -111,7 +117,14 @@ export default {
           font-size: 16px;
         }
       }
+    //    .el-skeleton{
+    //     position:absolute;
+    //     top: 4px;
+    //     left: 94px;
+    //     width: 150%;
+    // }
     }
+
   }
     .layer {
     width: 990px;
@@ -203,6 +216,17 @@ export default {
     .layer {
       display: block;
     }
+  }
+}
+.xtx-skeleton {
+  animation: fade 1s linear infinite alternate;
+}
+@keyframes fade {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>

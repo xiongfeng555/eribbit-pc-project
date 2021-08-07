@@ -9,7 +9,7 @@
       </div>
       <div class="cart">
         <a class="curr" href="#">
-          <i class="iconfont icon-gouwuche"></i><em>2</em>
+          <i class="iconfont icon-cart"></i><em>2</em>
         </a>
       </div>
     </div>
