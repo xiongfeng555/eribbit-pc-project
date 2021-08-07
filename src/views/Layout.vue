@@ -4,7 +4,7 @@
     <!-- 头部组件 -->
    <AppHeader/>
     <!-- 内容容器 -->
-    <div class="main">
+    <div class="app-main">
         <router-view></router-view>
     </div>
     <!-- 底部组件 -->
@@ -24,3 +24,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .app-main{
+    min-height: 600px;
+  }
+</style>
