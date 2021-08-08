@@ -73,6 +73,7 @@ export default {
   width: 1240px;
   background-color: #fff;
   position: absolute;
+  z-index: 999;
   left: -200px;
   top: 56px;
   height: 0;
