@@ -11,16 +11,19 @@
     </div>
   </div>
   <!-- 新鲜好物 -->
+    <HomeNew/>
 </template>
 <script>
-import HomeCategory from './home-category.vue'
+import HomeCategory from './components/home-category.vue'
 import Swiper from '@/components/swiper/swiper.vue'
+import HomeNew from './components/home-new.vue'
 import { findBanner } from '@/api/home'
 import { ref } from 'vue'
 export default {
   components: {
     HomeCategory,
-    Swiper
+    Swiper,
+    HomeNew
   },
   setup () {
     // 过去轮播图组件
