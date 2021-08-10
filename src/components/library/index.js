@@ -1,13 +1,26 @@
 // 封装插件
 
-import XtxSkeleton from './xtx-skeleton.vue'
-import XtxMore from './xtx-more.vue'
+// import XtxSkeleton from './xtx-skeleton.vue'
+// import XtxMore from './xtx-more.vue'
 import defaultImg from '@/assets/images/200.png'
 
+// import XtxBread from './xtx-bread.vue'
+// import XtxBreadItem from './xtx-bread-item.vue'
+
+const importFn = require.context('./', false, /\.vue$/)
+
+console.log(importFn.keys())
 export default {
   install (app) {
-    app.component(XtxSkeleton.name, XtxSkeleton)
-    app.component(XtxMore.name, XtxMore)
+    // app.component(XtxSkeleton.name, XtxSkeleton)
+    // app.component(XtxMore.name, XtxMore)
+    // app.component(XtxBread.name, XtxBread)
+    // app.component(XtxBreadItem.name, XtxBreadItem)
+    importFn.keys().forEach(path => {
+      const component = importFn(path).default
+      app.component(component.name, component)
+    })
+
     // 定义指令
     defineDirective(app)
   }
