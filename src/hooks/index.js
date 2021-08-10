@@ -9,7 +9,6 @@ export const useLazyData = (target, apiFn) => {
     ([{ isIntersecting }], observerElement) => {
     //   targetIsVisible.value = isIntersecting
       if (isIntersecting) {
-        console.log('进入可视区')
         stop()
         apiFn().then(data => {
           result.value = data.result
