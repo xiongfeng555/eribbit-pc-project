@@ -18,6 +18,8 @@
     <HomeBrand/>
     <!-- 产品展示 -->
     <HomeProduct/>
+    <!-- 最新专题 -->
+    <HomeSpecial/>
 </template>
 <script>
 import HomeCategory from './components/home-category.vue'
@@ -26,6 +28,7 @@ import HomeNew from './components/home-new.vue'
 import HomeHot from './components/home-hot.vue'
 import HomeBrand from '@/views/home/components/home-brand.vue'
 import HomeProduct from './components/home-product.vue'
+import HomeSpecial from './components/home-special.vue'
 import { findBanner } from '@/api/home'
 import { ref } from 'vue'
 export default {
@@ -35,7 +38,8 @@ export default {
     HomeNew,
     HomeHot,
     HomeBrand,
-    HomeProduct
+    HomeProduct,
+    HomeSpecial
   },
   setup () {
     // 过去轮播图组件

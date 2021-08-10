@@ -23,3 +23,8 @@ export const findHot = () => {
 export const findProduct = () => {
   return request('/home/goods', 'get')
 }
+
+// 获取首页专题数据
+export const findSpecial = () => {
+  return request('/home/special', 'get')
+}
