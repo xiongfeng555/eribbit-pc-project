@@ -12,18 +12,30 @@
   </div>
   <!-- 新鲜好物 -->
     <HomeNew/>
+    <!-- 人气推荐 -->
+    <HomeHot/>
+    <!-- 品牌推荐 -->
+    <HomeBrand/>
+    <!-- 产品展示 -->
+    <HomeProduct/>
 </template>
 <script>
 import HomeCategory from './components/home-category.vue'
 import Swiper from '@/components/swiper/swiper.vue'
 import HomeNew from './components/home-new.vue'
+import HomeHot from './components/home-hot.vue'
+import HomeBrand from '@/views/home/components/home-brand.vue'
+import HomeProduct from './components/home-product.vue'
 import { findBanner } from '@/api/home'
 import { ref } from 'vue'
 export default {
   components: {
     HomeCategory,
     Swiper,
-    HomeNew
+    HomeNew,
+    HomeHot,
+    HomeBrand,
+    HomeProduct
   },
   setup () {
     // 过去轮播图组件

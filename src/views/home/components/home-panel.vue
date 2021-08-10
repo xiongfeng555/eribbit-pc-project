@@ -33,9 +33,9 @@ export default {
     padding: 40px 0;
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
+    // justify-content: space-between;
     h3 {
-    //   flex: 1;
+      flex: 1;
       font-size: 32px;
       font-weight: normal;
       margin-left: 6px;
