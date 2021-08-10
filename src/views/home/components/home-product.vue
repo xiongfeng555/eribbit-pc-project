@@ -9,7 +9,7 @@
       </template>
       <div class="box">
         <RouterLink class="cover" to="/category/sub/`${item.id}`">
-          <img :src="item.picture" alt="">
+          <img  v-lazy="item.picture" alt="">
           <strong class="label">
             <span>{{item.saleInfo}}</span>
           </strong>
@@ -36,7 +36,6 @@ export default {
   setup () {
     const target = ref(null)
     const result = useLazyData(target, findProduct)
-    console.log(result)
     return {
       goodList: result,
       target
@@ -68,7 +67,7 @@ export default {
     display: flex;
     .cover {
       width: 240px;
-      height: 620px;
+      height: 610px;
       margin-right: 10px;
       position: relative;
       img {
