@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <el-carousel trigger="click" :height="height">
+    <el-carousel trigger="click" :height="height" v-if="images.length">
       <el-carousel-item v-for="item in images" :key="item.id">
          <router-link :to="item.hrefUrl">
              <img :src="item.imgUrl" class="image">
