@@ -81,7 +81,9 @@ export default {
     watch(
       () => router.params.id,
       (newValue) => {
-        newValue && getSubList()
+        if (newValue && `/category/${newValue}` === router.path) {
+          getSubList()
+        }
       },
       { immediate: true }
     )
