@@ -4,10 +4,11 @@
       <!-- 面包屑 -->
       <XtxBread>
         <XtxBreadItem to="/">首页</XtxBreadItem>
-        <transition name="fade-right" mode='out-in'>
-        <XtxBreadItem v-if="topCategory" :key="topCategory.id">{{ topCategory.name }}</XtxBreadItem>
+        <transition name="fade-right" mode="out-in">
+          <XtxBreadItem v-if="topCategory" :key="topCategory.id">{{
+            topCategory.name
+          }}</XtxBreadItem>
         </transition>
-
       </XtxBread>
       <!-- 轮播图 -->
       <Swiper height="500px" :images="sliders" />
@@ -16,10 +17,10 @@
         <h3>全部分类</h3>
         <ul>
           <li v-for="i in topCategory.children" :key="i.id">
-            <a href="javascript:;">
+            <router-link :to="`/category/sub/${i.id}`">
               <img :src="i.picture" />
               <p>{{ i.name }}</p>
-            </a>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -155,31 +156,31 @@ export default {
       padding: 0 65px 30px;
     }
   }
-  .fade-right{
-    &-leave{
-      &-to{
+  .fade-right {
+    &-leave {
+      &-to {
         transform: translateX(20px);
         opacity: 0;
       }
-      &-from{
-         transform: none;
-        opacity:1
+      &-from {
+        transform: none;
+        opacity: 1;
       }
-      &-active{
-        transition:all 0.5s linear
+      &-active {
+        transition: all 0.5s linear;
       }
     }
-    &-enter{
-      &-from{
+    &-enter {
+      &-from {
         transform: translateX(20px);
         opacity: 0;
       }
-      &-active{
-        transition:all 0.5s linear
+      &-active {
+        transition: all 0.5s linear;
       }
-       &-to{
-         transform: none;
-        opacity:1
+      &-to {
+        transform: none;
+        opacity: 1;
       }
     }
   }
