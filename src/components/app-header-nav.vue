@@ -2,7 +2,7 @@
   <ul class="app-header-nav">
       <!-- {{$store.state.category.list}} -->
     <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li v-for="item in $store.state.category.list" :key="item.id" @mouseenter="show(item.id)" @mouseleave="hidden(item.id)">
+    <li v-for="item in $store.state.category.list" :key="item.id" @mousemove="show(item.id)" @mouseleave="hidden(item.id)">
       <router-link :to="`/category/${item.id}`" @click="hidden(item.id)">{{item.name}}</router-link>
       <div class="layer" :class="{open:item.open}">
         <ul>
