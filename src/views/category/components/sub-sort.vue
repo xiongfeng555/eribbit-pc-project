@@ -29,17 +29,27 @@
         价格排序
         <i
           class="arrow up"
-          :class="{ active: sortParams.sortField === 'price'&& sortParams.sortMethod === 'asc' }"
+          :class="{
+            active:
+              sortParams.sortField === 'price' &&
+              sortParams.sortMethod === 'asc',
+          }"
         />
         <i
           class="arrow down"
-          :class="{ active: sortParams.sortField === 'price'&& sortParams.sortMethod === 'desc' }"
+          :class="{
+            active:
+              sortParams.sortField === 'price' &&
+              sortParams.sortMethod === 'desc',
+          }"
         />
       </a>
     </div>
     <div class="check">
-      <XtxCheckbox v-model="sortParams.inventory">仅显示有货商品</XtxCheckbox>
-      <XtxCheckbox v-model="sortParams.onlyDiscount"
+      <XtxCheckbox v-model="sortParams.inventory" @change="ChangeCheck"
+        >仅显示有货商品</XtxCheckbox
+      >
+      <XtxCheckbox v-model="sortParams.onlyDiscount" @change="ChangeCheck"
         >仅显示特惠商品</XtxCheckbox
       >
     </div>
@@ -49,7 +59,7 @@
 import { reactive } from 'vue'
 export default {
   name: 'SubSort',
-  setup () {
+  setup (props, { emit }) {
     // 1. 根据后台需要的参数定义数据对象
     // 2. 根据数据对象，绑定组件（复选框，排序按钮）
     // 3. 在操作排序组件的时候，需要反馈给数据对象
@@ -70,7 +80,8 @@ export default {
         if (sortParams.sortMethod === null) {
           sortParams.sortMethod = 'desc'
         } else {
-          sortParams.sortMethod = sortParams.sortMethod === 'asc' ? 'desc' : 'asc'
+          sortParams.sortMethod =
+            sortParams.sortMethod === 'asc' ? 'desc' : 'asc'
         }
       } else {
         // 重复点击失效
@@ -78,11 +89,15 @@ export default {
         sortParams.sortField = sortField
         sortParams.sortMethod = null
       }
+      emit('sort-change', sortParams)
     }
-
+    const ChangeCheck = () => {
+      emit('sort-change', sortParams)
+    }
     return {
       sortParams,
-      changeSort
+      changeSort,
+      ChangeCheck
     }
   }
 }
