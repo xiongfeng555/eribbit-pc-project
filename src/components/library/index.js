@@ -9,7 +9,6 @@ import defaultImg from '@/assets/images/200.png'
 
 const importFn = require.context('./', false, /\.vue$/)
 
-console.log(importFn.keys())
 export default {
   install (app) {
     // app.component(XtxSkeleton.name, XtxSkeleton)
@@ -28,6 +27,7 @@ export default {
 
 // 定义指令函数
 const defineDirective = (app) => {
+  // 图片懒加载指令
   app.directive('lazy', {
     mounted (el, binding) {
       // 创建一个观察对象，观察当前指令的元素
@@ -41,7 +41,6 @@ const defineDirective = (app) => {
             el.src = defaultImg
           }
           // 将指令上的地址赋给el的src属性
-          console.log(binding.value)
           el.src = binding.value
         }
       }, {

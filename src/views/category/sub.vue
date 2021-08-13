@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import { ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import SubBread from './components/sub-bread.vue'
 import SubFilter from './components/sub-filter.vue'
 import SubSort from './components/sub-sort.vue'
@@ -51,10 +51,10 @@ export default {
     const finished = ref(false)
     const goodsList = ref([])
     // 查询参数
-    const reqParams = {
+    const reqParams = reactive({
       page: 1,
       pageSize: 20
-    }
+    })
     // 获取数据函数
     const getData = () => {
       loading.value = true
