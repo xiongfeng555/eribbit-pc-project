@@ -20,8 +20,12 @@
       <div class="goods-info">
         <div class="media">
             <GoodsImage :images="goods.mainPictures"/>
+            <GoodsSales/>
         </div>
-        <div class="spec"></div>
+        <div class="spec">
+            <GoodsName :goods="goods"/>
+            <GoodsSku :goods="goods"/>
+        </div>
       </div>
       <!-- 商品推荐 -->
       <GoodsRelevant v-if="goods" />
@@ -45,10 +49,13 @@ import GoodsRelevant from './components/goods-relevant'
 import { findGoods } from '@/api/products'
 import { nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import GoodsImage from './components/goos-images.vue'
+import GoodsImage from './components/goods-images.vue'
+import GoodsSales from './components/goods-sales.vue'
+import GoodsName from './components/goods-name.vue'
+import GoodsSku from './components/goods-sku.vue'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku },
   setup () {
     // 获取商品数据
     const goods = useGoods()
