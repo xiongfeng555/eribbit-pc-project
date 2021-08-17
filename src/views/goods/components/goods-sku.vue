@@ -26,6 +26,7 @@
 <script>
 import PowerSet from '@/vendor/power-set.js'
 const spliter = '★'
+
 // 根据skus数据得到路径字典对象
 const getPathMap = (skus) => {
   const pathMap = {}
@@ -46,6 +47,7 @@ const getPathMap = (skus) => {
   })
   return pathMap
 }
+// 获取已点击的sku项
 const getSelectedAttr = (specs) => {
   const isSelected = []
   specs.forEach(spec => {
@@ -67,18 +69,38 @@ const updateDisabledStatus = (specs, pathMap) => {
     })
   })
 }
+// 初始化默认选项
+const initDefaultSelected = (goods, skuId) => {
+  const skuItem = goods.skus.find(item => item.id === skuId)
+  if (skuItem) {
+    goods.specs.forEach((item, index) => {
+      const value = skuItem.specs[index].valueName
+      item.values.forEach(val => {
+        val.selected = value === val.name
+      })
+    })
+  }
+}
 export default {
   name: 'GoodsSku',
   props: {
     goods: {
       type: Array,
       default: () => []
+    },
+    skuId: {
+      type: String,
+      default: ''
     }
   },
   setup (props) {
-    console.log(props.goods)
+    // 初始化默认选择sku
+    initDefaultSelected(props.goods, props.skuId)
     const pathMap = getPathMap(props.goods.skus)
+    // 更新禁止状态
     updateDisabledStatus(props.goods.specs, pathMap)
+
+    // 点击按钮更新状态
     const changeSku = (item, val) => {
       if (val.disabled) return
       if (val.selected) {
