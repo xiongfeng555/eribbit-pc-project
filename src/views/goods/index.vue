@@ -24,7 +24,7 @@
         </div>
         <div class="spec">
             <GoodsName :goods="goods"/>
-            <GoodsSku :goods="goods" skuId="1369155865461919746"/>
+            <GoodsSku :goods="goods" skuId="1369155865461919746" @change="changeSku"/>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -59,8 +59,14 @@ export default {
   setup () {
     // 获取商品数据
     const goods = useGoods()
-    console.log(goods)
-    return { goods }
+    const changeSku = (sku) => {
+      if (sku.skuId) {
+        goods.value.price = sku.price
+        goods.value.oldPrice = sku.oldPrice
+        goods.value.inventory = sku.inventory
+      }
+    }
+    return { goods, changeSku }
   }
 }
 const useGoods = () => {

@@ -93,7 +93,7 @@ export default {
       default: ''
     }
   },
-  setup (props) {
+  setup (props, { emit }) {
     // 初始化默认选择sku
     initDefaultSelected(props.goods, props.skuId)
     const pathMap = getPathMap(props.goods.skus)
@@ -112,8 +112,22 @@ export default {
         val.selected = true
       }
       updateDisabledStatus(props.goods.specs, pathMap)
+      // 把选择的项传给父组件
+      const validSelectedAttr = getSelectedAttr(props.goods.specs).filter(v => v)
+      const skuIds = pathMap[validSelectedAttr.join(spliter)]
+      if (validSelectedAttr.length === props.goods.specs.length) {
+        const sku = props.goods.skus.find(val => val.id === skuIds[0])
+        emit('change', {
+          skuId: sku.id,
+          price: sku.price,
+          oldPrice: sku.oldPrice,
+          inventory: sku.inventory,
+          specsText: sku.specs.reduce((p, c) => `${p} ${c.name}:${c.valueName}`, '').trim()
+        })
+      } else {
+        emit('change', {})
+      }
     }
-    console.log(pathMap)
     return { changeSku }
   }
 }
