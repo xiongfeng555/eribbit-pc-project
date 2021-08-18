@@ -30,7 +30,7 @@
         </div>
       </div>
       <!-- 商品推荐 -->
-      <GoodsRelevant v-if="goods" />
+      <GoodsRelevant v-if="goods" :goodsId="goods.id"/>
       <!-- 商品详情 -->
       <div class="goods-footer">
         <div class="goods-article">
