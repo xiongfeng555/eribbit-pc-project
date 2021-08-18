@@ -25,6 +25,7 @@
         <div class="spec">
             <GoodsName :goods="goods"/>
             <GoodsSku :goods="goods" skuId="1369155865461919746" @change="changeSku"/>
+            <XtxNumbox v-model="count" @update:modelValue="changeNum" :max="goods.inventory"/>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -66,7 +67,11 @@ export default {
         goods.value.inventory = sku.inventory
       }
     }
-    return { goods, changeSku }
+    const count = ref(1)
+    const changeNum = (newValue) => {
+      count.value = newValue
+    }
+    return { goods, changeSku, count, changeNum }
   }
 }
 const useGoods = () => {
