@@ -26,6 +26,7 @@
             <GoodsName :goods="goods"/>
             <GoodsSku :goods="goods" skuId="1369155865461919746" @change="changeSku"/>
             <XtxNumbox v-model="count" @update:modelValue="changeNum" :max="goods.inventory"/>
+            <XtxButton type="primary" size="large" style="margin-top:20px">加入购物车</XtxButton>
         </div>
       </div>
       <!-- 商品推荐 -->
