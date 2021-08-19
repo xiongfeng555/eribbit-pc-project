@@ -8,3 +8,8 @@ export const findGoods = (id) => {
 export const findRelevantGoods = (id, limit = 16) => {
   return request('/goods/relevant', 'get', { id, limit })
 }
+
+// 获取热销榜数据
+export const findGoodsHot = (id, limit = 4, type = 1) => {
+  return request('/goods/hot', 'get', { id, limit, type })
+}

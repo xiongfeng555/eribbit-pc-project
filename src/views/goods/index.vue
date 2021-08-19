@@ -35,12 +35,15 @@
       <div class="goods-footer">
         <div class="goods-article">
           <!-- 商品+评价 -->
-          <div class="goods-tabs"></div>
+          <GoodsTab/>
           <!-- 注意事项 -->
           <div class="goods-warn"></div>
         </div>
         <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside"></div>
+        <div class="goods-aside">
+          <GoodsHot :type="1"/>
+          <GoodsHot :type="2"/>
+        </div>
       </div>
     </div>
   </div>
@@ -55,9 +58,11 @@ import GoodsImage from './components/goods-images.vue'
 import GoodsSales from './components/goods-sales.vue'
 import GoodsName from './components/goods-name.vue'
 import GoodsSku from './components/goods-sku.vue'
+import GoodsTab from './components/goods-tab.vue'
+import GoodsHot from './components/goods-hot'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, GoodsTab, GoodsHot },
   setup () {
     // 获取商品数据
     const goods = useGoods()
