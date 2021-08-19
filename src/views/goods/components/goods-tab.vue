@@ -2,14 +2,14 @@
       <div class="goods-tabs">
     <nav>
       <a :class="{active:changeName === 'goodsDetail'}" @click="changeName = 'goodsDetail'" href="javascript:;">商品详情</a>
-      <a :class="{active:changeName === 'goodsComment'}" @click="changeName ='goodsComment'" href="javascript:;">商品评价<span>(500+)</span></a>
+      <a :class="{active:changeName === 'goodsComment'}" @click="changeName ='goodsComment'" href="javascript:;">商品评价<span>({{goods.commentCount}})</span></a>
     </nav>
     <!-- 切换内容的地方 -->
     <component :is="changeName"></component>
   </div>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import GoodsDetail from './goods-detail.vue'
 import GoodsComment from './goods-comment.vue'
 export default {
@@ -17,7 +17,8 @@ export default {
   components: { GoodsDetail, GoodsComment },
   setup () {
     const changeName = ref('goodsDetail')
-    return { changeName }
+    const goods = inject('goods')
+    return { changeName, goods }
   }
 }
 </script>

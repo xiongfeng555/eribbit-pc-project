@@ -37,7 +37,9 @@
           <!-- 商品+评价 -->
           <GoodsTab/>
           <!-- 注意事项 -->
-          <div class="goods-warn"></div>
+          <div class="goods-warn">
+            <GoodsWarn/>
+          </div>
         </div>
         <!-- 24热榜+专题推荐 -->
         <div class="goods-aside">
@@ -52,7 +54,7 @@
 <script>
 import GoodsRelevant from './components/goods-relevant'
 import { findGoods } from '@/api/products'
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, provide, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import GoodsImage from './components/goods-images.vue'
 import GoodsSales from './components/goods-sales.vue'
@@ -60,9 +62,10 @@ import GoodsName from './components/goods-name.vue'
 import GoodsSku from './components/goods-sku.vue'
 import GoodsTab from './components/goods-tab.vue'
 import GoodsHot from './components/goods-hot'
+import GoodsWarn from './components/goods-warn.vue'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, GoodsTab, GoodsHot },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, GoodsTab, GoodsHot, GoodsWarn },
   setup () {
     // 获取商品数据
     const goods = useGoods()
@@ -77,6 +80,7 @@ export default {
     const changeNum = (newValue) => {
       count.value = newValue
     }
+    provide('goods', goods)
     return { goods, changeSku, count, changeNum }
   }
 }
@@ -137,8 +141,8 @@ const useGoods = () => {
   background: #fff;
 }
 .goods-warn {
-  min-height: 600px;
+  min-height: 580px;
   background: #fff;
-  margin-top: 20px;
+  margin: 20px 0;
 }
 </style>
