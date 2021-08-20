@@ -49,32 +49,27 @@
     </div>
     <!-- 列表 -->
     <div class="list">
-      <div class="item">
+      <div class="item" v-for="item in commentList" :key="item">
         <div class="user">
           <img
-            src="http://zhoushugang.gitee.io/erabbit-client-pc-static/uploads/avatar_1.png"
+            :src="item.member.avatar"
             alt=""
           />
-          <span>兔****m</span>
+          <span>{{formatNickName(item.member.nickname)}}</span>
         </div>
         <div class="body">
           <div class="score">
-            <i class="iconfont icon-wjx01"></i>
-            <i class="iconfont icon-wjx01"></i>
-            <i class="iconfont icon-wjx01"></i>
-            <i class="iconfont icon-wjx01"></i>
-            <i class="iconfont icon-wjx02"></i>
-            <span class="attr">颜色：黑色 尺码：M</span>
+            <i class="iconfont icon-wjx01" v-for="i in item.score" :key="i"></i>
+            <i class="iconfont icon-wjx02" v-for="i in 5-item.score" :key="i"></i>
+            <span class="attr" v-for="val in item.orderInfo.specs" :key="val.nameValue">{{val.name}}: {{val.nameValue}}</span>
           </div>
           <div class="text">
-            网易云app上这款耳机非常不错 新人下载网易云购买这款耳机优惠大
-            而且耳机🎧确实正品 音质特别好 戴上这款耳机
-            听音乐看电影效果声音真是太棒了 无线方便 小盒自动充电
-            最主要是质量好音质棒 想要买耳机的放心拍 音效巴巴滴 老棒了
+            {{item.content}}
           </div>
+          <GoodsCommentImage :pictures="item.pictures" v-if="item.pictures.length"/>
           <div class="time">
-            <span>2020-10-10 10:11:22</span>
-            <span class="zan"><i class="iconfont icon-dianzan"></i>100</span>
+            <span>{{item.orderInfo.createTime}}</span>
+            <span class="zan"><i class="iconfont icon-dianzan"></i>{{item.praiseCount}}</span>
           </div>
         </div>
       </div>
@@ -82,10 +77,12 @@
   </div>
 </template>
 <script>
-import { inject, ref, reactive } from 'vue'
-import { findCommentInfo } from '@/api/goods.js'
+import { inject, ref, reactive, watch } from 'vue'
+import { findCommentInfo, findCommentInfoDetail } from '@/api/goods.js'
+import GoodsCommentImage from './goods-comment-image.vue'
 export default {
   name: 'GoodsComment',
+  components: { GoodsCommentImage },
   setup () {
     const commentInfo = ref(null)
     const goods = inject('goods')
@@ -100,7 +97,6 @@ export default {
       })
 
       commentInfo.value = data.result
-      console.log(data.result)
     })
     const currentTagIndex = ref(0)
     // 点击筛选便签
@@ -117,7 +113,6 @@ export default {
         reqParams.hasPicture = null
         reqParams.tag = tag.title
       }
-      console.log(reqParams)
     }
 
     // 筛选条件准备
@@ -128,7 +123,22 @@ export default {
       tag: null,
       sortField: null
     })
-    return { commentInfo, currentTagIndex, changeIndex, reqParams }
+
+    // 监听参数获取数据
+    const commentList = ref([])
+    watch(reqParams, () => {
+      console.log('1')
+      findCommentInfoDetail(goods.value.id, reqParams).then(data => {
+        commentList.value = data.result.items
+        console.log(commentList.value)
+      })
+    }, { immediate: true })
+
+    // 格式化nickname
+    const formatNickName = (nickname) => {
+      return nickname.substr(0, 1) + '****' + nickname.substr(-1)
+    }
+    return { commentInfo, currentTagIndex, changeIndex, reqParams, commentList, formatNickName }
   }
 }
 </script>
