@@ -74,6 +74,7 @@
         </div>
       </div>
     </div>
+    <XtxPagination @change="changePage" :total="total" :currentPage="reqParams.page" :pageSize="reqParams.pageSize"/>
   </div>
 </template>
 <script>
@@ -126,10 +127,11 @@ export default {
 
     // 监听参数获取数据
     const commentList = ref([])
+    const total = ref(0)
     watch(reqParams, () => {
-      console.log('1')
       findCommentInfoDetail(goods.value.id, reqParams).then(data => {
         commentList.value = data.result.items
+        total.value = data.result.counts
         console.log(commentList.value)
       })
     }, { immediate: true })
@@ -138,7 +140,11 @@ export default {
     const formatNickName = (nickname) => {
       return nickname.substr(0, 1) + '****' + nickname.substr(-1)
     }
-    return { commentInfo, currentTagIndex, changeIndex, reqParams, commentList, formatNickName }
+
+    const changePage = (pageIndex) => {
+      reqParams.page = pageIndex
+    }
+    return { commentInfo, currentTagIndex, changeIndex, reqParams, commentList, formatNickName, changePage, total }
   }
 }
 </script>
