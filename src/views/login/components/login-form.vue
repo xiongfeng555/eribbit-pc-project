@@ -1,26 +1,49 @@
 <template>
   <div class="account-box">
     <div class="toggle">
-      <a @click="isMsgLogin=false" href="javascript:;" v-if="isMsgLogin">
+      <a @click="isMsgLogin = false" href="javascript:;" v-if="isMsgLogin">
         <i class="iconfont icon-user"></i> 使用账号登录
       </a>
-      <a @click="isMsgLogin=true" href="javascript:;" v-else>
+      <a @click="isMsgLogin = true" href="javascript:;" v-else>
         <i class="iconfont icon-msg"></i> 使用短信登录
       </a>
     </div>
-    <Form class="form">
+    <Form
+      class="form"
+      :validation-schema="mySchema"
+      autocomplete="off"
+      v-slot="{ errors }"
+      ref="formCom"
+    >
       <template v-if="!isMsgLogin">
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <Field v-model="form.account" name='account' type="text" placeholder="请输入用户名或手机号" />
+            <Field
+              v-model="form.account"
+              name="account"
+              type="text"
+              placeholder="请输入用户名或手机号"
+              :class="{ error: errors.account }"
+            />
           </div>
-          <!-- <div class="error"><i class="iconfont icon-warning" />请输入手机号</div> -->
+          <div class="error" v-if="errors.account">
+            <i class="iconfont icon-warning" />{{ errors.account }}
+          </div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-lock"></i>
-            <Field v-model="form.password" name='password' type="password" placeholder="请输入密码"/>
+            <Field
+              v-model="form.password"
+              name="password"
+              type="password"
+              placeholder="请输入密码"
+              :class="{ error: errors.password }"
+            />
+          </div>
+          <div class="error" v-if="errors.password">
+            <i class="iconfont icon-warning" />{{ errors.password }}
           </div>
         </div>
       </template>
@@ -28,30 +51,54 @@
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <Field v-model="form.mobile" name='mobile' type="text" placeholder="请输入手机号" />
+            <Field
+              v-model="form.mobile"
+              name="mobile"
+              type="text"
+              placeholder="请输入手机号"
+              :class="{ error: errors.mobile }"
+            />
+          </div>
+          <div class="error" v-if="errors.mobile">
+            <i class="iconfont icon-warning" />{{ errors.mobile }}
           </div>
         </div>
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-code"></i>
-            <Field v-model="form.code" name='code' type="password" placeholder="请输入验证码"/>
+            <Field
+              v-model="form.code"
+              name="code"
+              type="text"
+              placeholder="请输入验证码"
+              :class="{ error: errors.code }"
+            />
             <span class="code">发送验证码</span>
+          </div>
+          <div class="error" v-if="errors.code">
+            <i class="iconfont icon-warning" />{{ errors.code }}
           </div>
         </div>
       </template>
       <div class="form-item">
         <div class="agree">
-          <XtxCheckbox v-model="form.isAgree" />
+          <Field name="isAgree" v-model="form.isAgree" as="XtxCheckbox" />
           <span>我已同意</span>
           <a href="javascript:;">《隐私条款》</a>
           <span>和</span>
           <a href="javascript:;">《服务条款》</a>
         </div>
+        <div class="error" v-if="errors.isAgree">
+          <i class="iconfont icon-warning" />{{ errors.isAgree }}
+        </div>
       </div>
-      <a href="javascript:;" class="btn">登录</a>
+      <a href="javascript:;" class="btn" @click="login">登录</a>
     </Form>
     <div class="action">
-      <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+      <img
+        src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
+        alt=""
+      />
       <div class="url">
         <a href="javascript:;">忘记密码</a>
         <a href="javascript:;">免费注册</a>
@@ -60,12 +107,22 @@
   </div>
 </template>
 <script>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { Form, Field } from 'vee-validate'
+import schema from '@/utils/vee-validation-schema.js'
 export default {
   components: { Form, Field },
   setup () {
     const isMsgLogin = ref(false)
+    watch(isMsgLogin, () => {
+      // 重置数据
+      form.isAgree = true
+      form.account = null
+      form.password = null
+      form.mobile = null
+      form.code = null
+    })
+    // 表单数据
     const form = reactive({
       isAgree: true,
       account: null,
@@ -73,7 +130,21 @@ export default {
       mobile: null,
       code: null
     })
-    return { isMsgLogin, form }
+    // 校验规则
+    const mySchema = {
+      account: schema.account,
+      password: schema.password,
+      mobile: schema.mobile,
+      code: schema.code,
+      isAgree: schema.isAgree
+    }
+    const formCom = ref(null)
+    // 点击登录函数
+    const login = async () => {
+      const valid = await formCom.value.validate()
+      console.log(valid)
+    }
+    return { isMsgLogin, form, mySchema, login, formCom }
   }
 }
 </script>
@@ -118,7 +189,8 @@ export default {
           &.error {
             border-color: $priceColor;
           }
-          &.active,&:focus {
+          &.active,
+          &:focus {
             border-color: $xtxColor;
           }
         }
@@ -178,5 +250,4 @@ export default {
     }
   }
 }
-
 </style>
