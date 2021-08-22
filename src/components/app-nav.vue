@@ -21,7 +21,7 @@
   </template>
   <template v-else>
 
-    <el-menu-item index="1">请先登录</el-menu-item>
+    <el-menu-item index="1"><router-link to="/login">请先登录</router-link></el-menu-item>
     <span class="line">|</span>
      <el-menu-item index="2">免费注册</el-menu-item>
      <span class="line">|</span>

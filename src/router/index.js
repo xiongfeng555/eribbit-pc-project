@@ -5,6 +5,7 @@ const Home = () => import('@/views/home')
 const TopCategory = () => import('@/views/category/index.vue')
 const SubCategory = () => import('@/views/category/sub.vue')
 const Goods = () => import('@/views/goods/index')
+const Login = () => import('@/views/login/index')
 
 const routes = [
   // 一级路由布局
@@ -26,6 +27,10 @@ const routes = [
       },
       { path: '/product/:id', component: Goods }
     ]
+  },
+  {
+    path: '/login',
+    component: Login
   }
 ]
 
