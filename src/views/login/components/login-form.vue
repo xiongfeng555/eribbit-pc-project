@@ -110,10 +110,17 @@
 import { reactive, ref, watch } from 'vue'
 import { Form, Field } from 'vee-validate'
 import schema from '@/utils/vee-validation-schema.js'
+import { ElMessage } from 'element-plus'
+import { userAccountLogin } from '@/api/user'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 export default {
   components: { Form, Field },
   setup () {
     const isMsgLogin = ref(false)
+    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
     watch(isMsgLogin, () => {
       // 重置数据
       form.isAgree = true
@@ -142,7 +149,33 @@ export default {
     // 点击登录函数
     const login = async () => {
       const valid = await formCom.value.validate()
-      console.log(valid)
+      if (valid) {
+        const { account, password } = form
+        userAccountLogin({ account, password }).then(data => {
+          console.log(data)
+          const { id, avatar, nickname, account, mobile, token } = data.result
+
+          store.commit('user/setUser', {
+            id,
+            avatar,
+            nickname,
+            account,
+            mobile,
+            token
+          })
+          ElMessage.success({
+            message: '登录成功',
+            type: 'success'
+          })
+          router.push(route.query.redirectUrl || '/')
+        }).catch(err => {
+          if (err.response.data) {
+            ElMessage.error(err.response.data.message)
+          } else {
+            ElMessage.error('登录失败')
+          }
+        })
+      }
     }
     return { isMsgLogin, form, mySchema, login, formCom }
   }
