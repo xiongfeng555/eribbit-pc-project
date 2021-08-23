@@ -16,7 +16,7 @@
       <span>wogaf</span>
   </el-menu-item>
   <span class="line">|</span>
-   <el-menu-item index="2">退出登录</el-menu-item>
+   <el-menu-item index="2" @click="logout">退出登录</el-menu-item>
    <span class="line">|</span>
   </template>
   <template v-else>
@@ -48,23 +48,31 @@
 <script>
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup () {
     const activeIndex = ref('1')
     const activeIndex2 = ref('3')
     const store = useStore()
+    const router = useRouter()
     const profile = computed(() => {
       return store.state.user.profile
     })
     const handleSelect = (key, keyPath) => {
       console.log(key, keyPath)
     }
+    // 退出登录
+    const logout = () => {
+      store.commit('user/setUser', {})
+      router.push('/login')
+    }
     return {
       activeIndex,
       activeIndex2,
       handleSelect,
-      profile
+      profile,
+      logout
     }
   }
 })
