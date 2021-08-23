@@ -73,7 +73,9 @@
               placeholder="请输入验证码"
               :class="{ error: errors.code }"
             />
-            <span class="code">发送验证码</span>
+            <span class="code" @click="send">
+                {{time===0?'发送验证码':`${time}s后再尝试`}}
+            </span>
           </div>
           <div class="error" v-if="errors.code">
             <i class="iconfont icon-warning" />{{ errors.code }}
@@ -111,9 +113,11 @@ import { reactive, ref, watch } from 'vue'
 import { Form, Field } from 'vee-validate'
 import schema from '@/utils/vee-validation-schema.js'
 import { ElMessage } from 'element-plus'
-import { userAccountLogin } from '@/api/user'
+import { userAccountLogin, userMobileLoginByCode, userMobileLogin } from '@/api/user'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+import { useIntervalFn } from '@vueuse/core'
+
 export default {
   components: { Form, Field },
   setup () {
@@ -146,13 +150,60 @@ export default {
       isAgree: schema.isAgree
     }
     const formCom = ref(null)
+    const time = ref(0)
+
+    // 设置一个定时器，最后false是不立刻启动
+    const { pause, resume } = useIntervalFn(() => {
+      time.value--
+      if (time.value === 0) {
+        // 暂停定时器
+        pause()
+      }
+    }, 1000, false)
+    // 发送验证码函数
+    const send = () => {
+      const valid = schema.mobile(form.mobile)
+      if (valid === true) {
+        if (time.value === 0) {
+          userMobileLoginByCode(form.mobile).then(data => {
+            time.value = 60
+            // 开始定时器
+            resume()
+            ElMessage.success({
+              message: '发送成功',
+              type: 'success'
+            })
+          }).catch(err => {
+            ElMessage.error(err.response.data.message)
+          })
+        }
+      } else {
+        console.log('手机号发送失败')
+      }
+    }
+
     // 点击登录函数
     const login = async () => {
       const valid = await formCom.value.validate()
       if (valid) {
-        const { account, password } = form
-        userAccountLogin({ account, password }).then(data => {
-          console.log(data)
+        const { account, password, mobile, code } = form
+        let data = null
+
+        try {
+          // 手机号登录
+          if (isMsgLogin.value) {
+            data = await userMobileLogin({ mobile, code })
+          } else {
+            // 账户密码登录
+            data = await userAccountLogin({ account, password })
+          }
+        } catch (error) {
+          if (error.response.data) {
+            ElMessage.error(error.response.data.message)
+          }
+        }
+
+        if (data) {
           const { id, avatar, nickname, account, mobile, token } = data.result
 
           store.commit('user/setUser', {
@@ -168,16 +219,10 @@ export default {
             type: 'success'
           })
           router.push(route.query.redirectUrl || '/')
-        }).catch(err => {
-          if (err.response.data) {
-            ElMessage.error(err.response.data.message)
-          } else {
-            ElMessage.error('登录失败')
-          }
-        })
+        }
       }
     }
-    return { isMsgLogin, form, mySchema, login, formCom }
+    return { isMsgLogin, form, mySchema, login, formCom, send, time }
   }
 }
 </script>

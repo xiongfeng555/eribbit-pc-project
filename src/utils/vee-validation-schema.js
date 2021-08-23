@@ -14,7 +14,7 @@ export default {
   // 手机号校验
   mobile (value) {
     if (!value) return '请输入手机号'
-    if (!/^1[3-9][1-9]{9}$/.test(value)) return '请输入正确格式的手机号'
+    if (!/^1[3-9]\d{9}$/.test(value)) return '请输入正确格式的手机号'
     return true
   },
   code (value) {
