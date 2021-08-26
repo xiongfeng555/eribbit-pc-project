@@ -10,13 +10,17 @@ export default {
         account: '',
         mobile: '',
         token: ''
-      }
+      },
+      redirectURL: '/'
     }
   },
   mutations: {
     // 修改用户信息,payload是用户信息
     setUser (state, payload) {
       state.profile = payload
+    },
+    setRedirectURL (state, url) {
+      state.redirectURL = url
     }
   }
 }

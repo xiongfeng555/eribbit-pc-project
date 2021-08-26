@@ -97,10 +97,7 @@
       <a href="javascript:;" class="btn" @click="login">登录</a>
     </Form>
     <div class="action">
-      <img
-        src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
-        alt=""
-      />
+      <span id="qqLoginBtn"></span>
       <div class="url">
         <a href="javascript:;">忘记密码</a>
         <a href="javascript:;">免费注册</a>
@@ -109,7 +106,7 @@
   </div>
 </template>
 <script>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, watch, onMounted } from 'vue'
 import { Form, Field } from 'vee-validate'
 import schema from '@/utils/vee-validation-schema.js'
 import { ElMessage } from 'element-plus'
@@ -117,7 +114,7 @@ import { userAccountLogin, userMobileLoginByCode, userMobileLogin } from '@/api/
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useIntervalFn } from '@vueuse/core'
-
+import QC from 'qc'
 export default {
   components: { Form, Field },
   setup () {
@@ -125,6 +122,13 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    // QQ登录按钮生成
+    onMounted(() => {
+      // 组件渲染完毕，使用QC生成QQ登录按钮
+      QC.Login({
+        btnId: 'qqLoginBtn'
+      })
+    })
     watch(isMsgLogin, () => {
       // 重置数据
       form.isAgree = true
