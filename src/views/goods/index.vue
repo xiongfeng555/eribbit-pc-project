@@ -26,7 +26,7 @@
             <GoodsName :goods="goods"/>
             <GoodsSku :goods="goods" skuId="1369155865461919746" @change="changeSku"/>
             <XtxNumbox v-model="count" @update:modelValue="changeNum" :max="goods.inventory"/>
-            <XtxButton type="primary" size="large" style="margin-top:20px">加入购物车</XtxButton>
+            <XtxButton type="primary" size="large" style="margin-top:20px" @click="addCart">加入购物车</XtxButton>
         </div>
       </div>
       <!-- 商品推荐 -->
@@ -63,25 +63,51 @@ import GoodsSku from './components/goods-sku.vue'
 import GoodsTab from './components/goods-tab.vue'
 import GoodsHot from './components/goods-hot'
 import GoodsWarn from './components/goods-warn.vue'
+import { ElMessage } from 'element-plus'
+import { useStore } from 'vuex'
 export default {
   name: 'XtxGoodsPage',
   components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, GoodsTab, GoodsHot, GoodsWarn },
   setup () {
     // 获取商品数据
     const goods = useGoods()
+    const currSku = ref(null)
+    const store = useStore()
     const changeSku = (sku) => {
       if (sku.skuId) {
         goods.value.price = sku.price
         goods.value.oldPrice = sku.oldPrice
         goods.value.inventory = sku.inventory
       }
+      currSku.value = sku
     }
     const count = ref(1)
     const changeNum = (newValue) => {
       count.value = newValue
     }
     provide('goods', goods)
-    return { goods, changeSku, count, changeNum }
+    const addCart = () => {
+      if (currSku.value && currSku.value.skuId) {
+        store.dispatch('cart/addCart', {
+          id: goods.value.id,
+          skuId: currSku.value.skuId,
+          name: goods.value.name,
+          picture: goods.value.mainPictures[0],
+          price: currSku.value.price,
+          nowPrice: currSku.value.price,
+          count: count.value,
+          attrsText: currSku.value.specsText,
+          selected: true,
+          isEffective: true,
+          stock: currSku.value.inventory
+        })
+      } else {
+        ElMessage.warning({
+          message: '请选择规格'
+        })
+      }
+    }
+    return { goods, changeSku, count, changeNum, addCart }
   }
 }
 const useGoods = () => {
