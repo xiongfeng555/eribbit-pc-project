@@ -1,9 +1,9 @@
 <template>
   <div class="cart">
-    <a class="curr" href="javascript:;">
+    <router-link class="curr" to="/cart">
       <i class="iconfont icon-cart"></i><em> {{$store.getters['cart/validTotal']}}</em>
-    </a>
-    <div class="layer">
+    </router-link>
+    <div class="layer" v-if="$store.getters['cart/validTotal']>0&&$route.path!=='/cart'">
       <div class="list">
         <div class="item" v-for="item in $store.getters['cart/validList']" :key="item.skuId">
           <RouterLink to="">
@@ -17,7 +17,7 @@
               <p class="count">x{{item.count}}</p>
             </div>
           </RouterLink>
-          <i class="iconfont icon-close-new"></i>
+          <i class="iconfont icon-close-new" @click="deleteCart(item)"></i>
         </div>
       </div>
       <div class="foot">
@@ -31,8 +31,18 @@
   </div>
 </template>
 <script>
+import { useStore } from 'vuex'
+// import { ElMessage } from 'element-plus'
 export default {
-  name: 'AppHeaderCart'
+  name: 'AppHeaderCart',
+  setup () {
+    const store = useStore()
+    store.dispatch('cart/findNewGoods')
+    const deleteCart = (good) => {
+      store.dispatch('cart/deleteCart', good)
+    }
+    return { deleteCart }
+  }
 }
 </script>
 <style scoped lang="scss">
