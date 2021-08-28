@@ -7,9 +7,23 @@ export default {
       list: []
     }
   },
+  getters: {
+    // 获取有效列表
+    validList (state) {
+      return state.list.filter(goods => goods.stock > 0 && goods.isEffective)
+    },
+    // 计算购物车总件数
+    validTotal (state, getters) {
+      return getters.validList.reduce((p, c) => p + c.count, 0)
+    },
+    // 计算购物车商品总价数
+    validAmount (state, getters) {
+      return getters.validList.reduce((p, c) => p + c.count * c.nowPrice, 0)
+    }
+  },
   mutations: {
     addCart (state, payload) {
-      const sameIndex = state.list.find(goods => goods.skuId === payload.skuId)
+      const sameIndex = state.list.findIndex(goods => goods.skuId === payload.skuId)
       if (sameIndex > -1) {
         const count = state.list[sameIndex].count
         payload.count += count

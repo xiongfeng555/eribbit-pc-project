@@ -1,20 +1,20 @@
 <template>
   <div class="cart">
     <a class="curr" href="javascript:;">
-      <i class="iconfont icon-cart"></i><em>2</em>
+      <i class="iconfont icon-cart"></i><em> {{$store.getters['cart/validTotal']}}</em>
     </a>
     <div class="layer">
       <div class="list">
-        <div class="item" v-for="i in 4" :key="i">
+        <div class="item" v-for="item in $store.getters['cart/validList']" :key="item.skuId">
           <RouterLink to="">
-            <img src="https://yanxuan-item.nosdn.127.net/ead73130f3dbdb3cabe1c7b0f4fd3d28.png" alt="">
+            <img :src="item.picture" alt="">
             <div class="center">
-              <p class="name ellipsis-2">和手足干裂说拜拜 ingrams手足皲裂修复霜</p>
-              <p class="attr ellipsis">颜色：修复绿瓶 容量：150ml</p>
+              <p class="name ellipsis-2">{{item.name}}</p>
+              <p class="attr ellipsis">{{item.attrsText}}</p>
             </div>
             <div class="right">
-              <p class="price">&yen;45.00</p>
-              <p class="count">x2</p>
+              <p class="price">&yen;{{item.nowPrice}}</p>
+              <p class="count">x{{item.count}}</p>
             </div>
           </RouterLink>
           <i class="iconfont icon-close-new"></i>
@@ -22,8 +22,8 @@
       </div>
       <div class="foot">
         <div class="total">
-          <p>共 3 件商品</p>
-          <p>&yen;135.00</p>
+          <p>共 {{$store.getters['cart/validTotal']}} 件商品</p>
+          <p>&yen;{{$store.getters['cart/validAmount']}}</p>
         </div>
         <XtxButton type="plain">去购物车结算</XtxButton>
       </div>
