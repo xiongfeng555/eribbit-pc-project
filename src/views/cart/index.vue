@@ -10,7 +10,9 @@
           <thead>
             <tr>
               <th width="120">
-                <XtxCheckbox :modelValue="$store.getters['cart/isSelectedAll']" @update:modelValue="updateAllSelected"
+                <XtxCheckbox
+                  :modelValue="$store.getters['cart/isSelectedAll']"
+                  @update:modelValue="updateAllSelected"
                   >全选</XtxCheckbox
                 >
               </th>
@@ -25,14 +27,19 @@
           <tbody>
             <tr v-if="$store.getters['cart/validList'].length === 0">
               <td colspan="6">
-                <CartNone/>
+                <CartNone />
               </td>
             </tr>
             <tr
               v-for="goods in $store.getters['cart/validList']"
               :key="goods.skuId"
             >
-              <td><XtxCheckbox :modelValue="goods.selected" @change="($event)=>checkOne(goods.skuId,$event)"/></td>
+              <td>
+                <XtxCheckbox
+                  :modelValue="goods.selected"
+                  @change="($event) => checkOne(goods.skuId, $event)"
+                />
+              </td>
               <td>
                 <div class="goods">
                   <RouterLink :to="`/product/${goods.id}`"
@@ -54,14 +61,21 @@
                 </p>
               </td>
               <td class="tc">
-                <XtxNumbox :modelValue="goods.count"/>
+                <XtxNumbox :modelValue="goods.count" />
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ goods.nowPrice * goods.count }}</p>
               </td>
               <td class="tc">
                 <p><a href="javascript:;">移入收藏夹</a></p>
-                <p><a class="green" href="javascript:;" @click="deleteItem(goods)">删除</a></p>
+                <p>
+                  <a
+                    class="green"
+                    href="javascript:;"
+                    @click="deleteItem(goods)"
+                    >删除</a
+                  >
+                </p>
                 <p><a href="javascript:;">找相似</a></p>
               </td>
             </tr>
@@ -87,13 +101,22 @@
                   </div>
                 </div>
               </td>
-              <td class="tc"><p>&yen;{{goods.nowPrice}}</p></td>
-              <td class="tc">{{goods.count}}</td>
+              <td class="tc">
+                <p>&yen;{{ goods.nowPrice }}</p>
+              </td>
+              <td class="tc">{{ goods.count }}</td>
               <td class="tc">
                 <p>&yen;{{ goods.nowPrice * goods.count }}</p>
               </td>
               <td class="tc">
-                <p><a class="green" href="javascript:;" @click="deleteItem(goods)">删除</a></p>
+                <p>
+                  <a
+                    class="green"
+                    href="javascript:;"
+                    @click="deleteItem(goods)"
+                    >删除</a
+                  >
+                </p>
                 <p><a href="javascript:;">找相似</a></p>
               </td>
             </tr>
@@ -103,7 +126,9 @@
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          <XtxCheckbox :modelValue="$store.getters['cart/isSelectedAll']" @update:modelValue="updateAllSelected"
+          <XtxCheckbox
+            :modelValue="$store.getters['cart/isSelectedAll']"
+            @update:modelValue="updateAllSelected"
             >全选</XtxCheckbox
           >
           <a href="javascript:;">删除商品</a>
@@ -111,8 +136,9 @@
           <a href="javascript:;">清空失效商品</a>
         </div>
         <div class="total">
-          共 {{$store.getters['cart/validTotal']}} 件商品，已选择 {{$store.getters['cart/selectedTotal']}} 件，商品合计：
-          <span class="red">¥{{$store.getters['cart/selectedAmount']}}</span>
+          共 {{ $store.getters["cart/validTotal"] }} 件商品，已选择
+          {{ $store.getters["cart/selectedTotal"] }} 件，商品合计：
+          <span class="red">¥{{ $store.getters["cart/selectedAmount"] }}</span>
           <XtxButton type="primary">下单结算</XtxButton>
         </div>
       </div>
@@ -124,8 +150,9 @@
 <script>
 import GoodRelevant from '@/views/goods/components/goods-relevant'
 import { useStore } from 'vuex'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import CartNone from './cart-none.vue'
+
 export default {
   name: 'XtxCartPage',
   components: { GoodRelevant, CartNone },
@@ -138,15 +165,29 @@ export default {
       store.dispatch('cart/clearAllSelected', selected)
     }
     const deleteItem = (goods) => {
-      store.dispatch('cart/deleteCart', goods).then(() => {
-        ElMessage.success({ message: '删除成功', duration: 1000 })
+      ElMessageBox.confirm('您确定从购物车删除该商品吗？', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
+        .then(() => {
+          store.dispatch('cart/deleteCart', goods).then(() => {
+            ElMessage.success({ message: '删除成功', duration: 1000 })
+          })
+        }).catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '已取消删除',
+            duration: 1000
+          })
+        })
     }
     return { checkOne, updateAllSelected, deleteItem }
   }
 }
 </script>
 <style scoped lang="scss">
+
 .tc {
   text-align: center;
   .xtx-numbox {

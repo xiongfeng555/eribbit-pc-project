@@ -87,6 +87,7 @@ export default {
     }
     provide('goods', goods)
     const addCart = () => {
+      // 已选规格
       if (currSku.value && currSku.value.skuId) {
         store.dispatch('cart/addCart', {
           id: goods.value.id,
@@ -100,10 +101,11 @@ export default {
           selected: true,
           isEffective: true,
           stock: currSku.value.inventory
-        })
+        }).then(() => { ElMessage.success({ message: '成功加入购物车', duration: 1000 }) })
       } else {
         ElMessage.warning({
-          message: '请选择规格'
+          message: '请选择规格',
+          duration: 1000
         })
       }
     }
