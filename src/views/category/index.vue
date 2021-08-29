@@ -88,7 +88,6 @@ export default {
       },
       { immediate: true }
     )
-    console.log(subList)
     return { sliders, topCategory, subList }
   }
 }

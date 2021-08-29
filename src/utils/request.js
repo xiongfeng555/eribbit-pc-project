@@ -8,7 +8,7 @@ import store from '@/store'
 import router from '@/router'
 
 // 导出基本地址
-export const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
+export const baseURL = 'https://apipc-xiaotuxian-front.itheima.net/'
 const instance = axios.create({
   baseURL,
   timeout: 5000

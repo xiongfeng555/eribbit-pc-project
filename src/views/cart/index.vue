@@ -10,7 +10,7 @@
           <thead>
             <tr>
               <th width="120">
-                <XtxCheckbox :modelValue="$store.getters['cart/isSelectedAll']"
+                <XtxCheckbox :modelValue="$store.getters['cart/isSelectedAll']" @update:modelValue="updateAllSelected"
                   >全选</XtxCheckbox
                 >
               </th>
@@ -23,6 +23,11 @@
           </thead>
           <!-- 有效商品 -->
           <tbody>
+            <tr v-if="$store.getters['cart/validList'].length === 0">
+              <td colspan="6">
+                <CartNone/>
+              </td>
+            </tr>
             <tr
               v-for="goods in $store.getters['cart/validList']"
               :key="goods.skuId"
@@ -56,7 +61,7 @@
               </td>
               <td class="tc">
                 <p><a href="javascript:;">移入收藏夹</a></p>
-                <p><a class="green" href="javascript:;">删除</a></p>
+                <p><a class="green" href="javascript:;" @click="deleteItem(goods)">删除</a></p>
                 <p><a href="javascript:;">找相似</a></p>
               </td>
             </tr>
@@ -88,7 +93,7 @@
                 <p>&yen;{{ goods.nowPrice * goods.count }}</p>
               </td>
               <td class="tc">
-                <p><a class="green" href="javascript:;">删除</a></p>
+                <p><a class="green" href="javascript:;" @click="deleteItem(goods)">删除</a></p>
                 <p><a href="javascript:;">找相似</a></p>
               </td>
             </tr>
@@ -98,7 +103,7 @@
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          <XtxCheckbox :modelValue="$store.getters['cart/isSelectedAll']"
+          <XtxCheckbox :modelValue="$store.getters['cart/isSelectedAll']" @update:modelValue="updateAllSelected"
             >全选</XtxCheckbox
           >
           <a href="javascript:;">删除商品</a>
@@ -119,15 +124,25 @@
 <script>
 import GoodRelevant from '@/views/goods/components/goods-relevant'
 import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
+import CartNone from './cart-none.vue'
 export default {
   name: 'XtxCartPage',
-  components: { GoodRelevant },
+  components: { GoodRelevant, CartNone },
   setup () {
     const store = useStore()
     const checkOne = (skuId, selected) => {
       store.dispatch('cart/updateCart', { skuId, selected })
     }
-    return { checkOne }
+    const updateAllSelected = (selected) => {
+      store.dispatch('cart/clearAllSelected', selected)
+    }
+    const deleteItem = (goods) => {
+      store.dispatch('cart/deleteCart', goods).then(() => {
+        ElMessage.success({ message: '删除成功', duration: 1000 })
+      })
+    }
+    return { checkOne, updateAllSelected, deleteItem }
   }
 }
 </script>

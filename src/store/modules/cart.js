@@ -1,6 +1,7 @@
 // 购物车模块
 
 import { getNewCartGoods } from '@/api/cart'
+
 export default {
   namespaced: true,
   state () {
@@ -110,6 +111,18 @@ export default {
         } else {
           ctx.commit('updateCart', payload)
           resolve()
+        }
+      })
+    },
+    clearAllSelected (ctx, selected) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+
+        } else {
+          ctx.getters.validList.forEach(goods => {
+            ctx.commit('updateCart', { skuId: goods.skuId, selected })
+            resolve()
+          })
         }
       })
     }

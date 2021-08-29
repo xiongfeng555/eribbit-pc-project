@@ -25,7 +25,7 @@
         <div class="spec">
             <GoodsName :goods="goods"/>
             <GoodsSku :goods="goods" skuId="1369155865461919746" @change="changeSku"/>
-            <XtxNumbox v-model="count" @update:modelValue="changeNum" :max="goods.inventory"/>
+            <XtxNumbox v-model="count" @update:modelValue="changeNum" :max="goods.inventory">数量</XtxNumbox>
             <XtxButton type="primary" size="large" style="margin-top:20px" @click="addCart">加入购物车</XtxButton>
         </div>
       </div>
