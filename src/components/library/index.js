@@ -8,7 +8,8 @@ import defaultImg from '@/assets/images/200.png'
 // import XtxBreadItem from './xtx-bread-item.vue'
 
 const importFn = require.context('./', false, /\.vue$/)
-
+console.log(importFn)
+console.log(importFn.keys())
 export default {
   install (app) {
     // app.component(XtxSkeleton.name, XtxSkeleton)

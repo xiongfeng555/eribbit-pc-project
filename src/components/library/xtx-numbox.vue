@@ -1,6 +1,7 @@
 <template>
   <div class="xtx-numbox">
-    <div class="label">数量</div>
+    <div class="label"><slot/></div>
+
     <div class="numbox">
       <a href="javascript:;" @click="changeNum(-1)">-</a>
       <input type="text" readonly :value="modelValue">

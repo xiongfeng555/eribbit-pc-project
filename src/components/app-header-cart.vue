@@ -6,7 +6,7 @@
     <div class="layer" v-if="$store.getters['cart/validTotal']>0&&$route.path!=='/cart'">
       <div class="list">
         <div class="item" v-for="item in $store.getters['cart/validList']" :key="item.skuId">
-          <RouterLink to="">
+          <RouterLink :to="`/product/${item.id}`">
             <img :src="item.picture" alt="">
             <div class="center">
               <p class="name ellipsis-2">{{item.name}}</p>

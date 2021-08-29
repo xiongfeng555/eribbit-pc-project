@@ -21,6 +21,26 @@ export default {
     // 计算购物车商品总价数
     validAmount (state, getters) {
       return getters.validList.reduce((p, c) => p + c.count * c.nowPrice, 0)
+    },
+    // 无效商品列表
+    invalidList (state) {
+      return state.list.filter(goods => goods.stock <= 0 || !goods.isEffective)
+    },
+    // 已选中商品列表
+    isSelectedList (state, getters) {
+      return getters.validList.filter(goods => goods.selected)
+    },
+    // 已选中商品的数量
+    selectedTotal (state, getters) {
+      return getters.isSelectedList.reduce((p, c) => p + c.count, 0)
+    },
+    // 已选商品总金额
+    selectedAmount (state, getters) {
+      return getters.isSelectedList.reduce((p, c) => p + c.nowPrice * c.count, 0)
+    },
+    // 是否全选
+    isSelectedAll (state, getters) {
+      return getters.validList.length !== 0 && getters.isSelectedList.length === getters.validList.length
     }
   },
   mutations: {
@@ -79,6 +99,16 @@ export default {
 
         } else {
           ctx.commit('deleteCart', payload)
+          resolve()
+        }
+      })
+    },
+    updateCart (ctx, payload) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+
+        } else {
+          ctx.commit('updateCart', payload)
           resolve()
         }
       })
