@@ -72,12 +72,12 @@ export default {
   },
   actions: {
     // 批量删除
-    batchDeleteCart (ctx) {
+    batchDeleteCart (ctx, isClear) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
 
         } else {
-          ctx.getters.isSelectedList.forEach(item => {
+          ctx.getters[isClear ? 'invalidList' : 'isSelectedList'].forEach(item => {
             ctx.commit('deleteCart', item)
             resolve()
           })

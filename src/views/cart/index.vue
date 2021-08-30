@@ -131,9 +131,9 @@
             @update:modelValue="updateAllSelected"
             >全选</XtxCheckbox
           >
-          <a href="javascript:;" @click="deleteSelected">删除商品</a>
+          <a href="javascript:;" @click="deleteSelected(false)">删除商品</a>
           <a href="javascript:;">移入收藏夹</a>
-          <a href="javascript:;">清空失效商品</a>
+          <a href="javascript:;" @click="deleteSelected(true)" v-if="$store.getters['cart/invalidList'].length">清空失效商品</a>
         </div>
         <div class="total">
           共 {{ $store.getters["cart/validTotal"] }} 件商品，已选择
@@ -183,16 +183,22 @@ export default {
         })
     }
     // 批量删除
-    const deleteSelected = () => {
-      ElMessageBox.confirm('您确定从购物车删除该商品吗？', '温馨提示', {
+    const deleteSelected = (isClear) => {
+      ElMessageBox.confirm(`您确定${isClear ? '清空无效' : '从购物车删除该'}商品吗？`, '温馨提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          store.dispatch('cart/batchDeleteCart').then(() => {
-            ElMessage.success({ message: '删除成功', duration: 1000 })
-          })
+          if (isClear) {
+            store.dispatch('cart/batchDeleteCart', isClear).then(() => {
+              ElMessage.success({ message: '删除成功', duration: 1000 })
+            })
+          } else {
+            store.dispatch('cart/batchDeleteCart').then(() => {
+              ElMessage.success({ message: '删除成功', duration: 1000 })
+            })
+          }
         }).catch(() => {
           ElMessage({
             type: 'info',
