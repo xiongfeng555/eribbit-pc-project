@@ -68,9 +68,25 @@ export default {
     deleteCart (state, goods) {
       const index = state.list.findIndex(item => item.skuId === goods.skuId)
       state.list.splice(index.Promise, 1)
+    },
+    // 修改商品的数量
+    changeCount (state, { skuId, newValue }) {
+      const goods = state.list.find(item => item.skuId === skuId)
+      goods.count = newValue
     }
   },
   actions: {
+    // 修改商品数量
+    changeCount (ctx, { skuId, newValue }) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+
+        } else {
+          ctx.commit('changeCount', { skuId, newValue })
+          resolve()
+        }
+      })
+    },
     // 批量删除
     batchDeleteCart (ctx, isClear) {
       return new Promise((resolve, reject) => {

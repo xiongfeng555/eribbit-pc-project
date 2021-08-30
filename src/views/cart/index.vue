@@ -61,7 +61,7 @@
                 </p>
               </td>
               <td class="tc">
-                <XtxNumbox :modelValue="goods.count" />
+                <XtxNumbox :modelValue="goods.count" @update:modelValue="($event)=>changeCount(goods.skuId,$event)" max="99"/>
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ goods.nowPrice * goods.count }}</p>
@@ -174,12 +174,6 @@ export default {
           store.dispatch('cart/deleteCart', goods).then(() => {
             ElMessage.success({ message: '删除成功', duration: 1000 })
           })
-        }).catch(() => {
-          ElMessage({
-            type: 'info',
-            message: '已取消删除',
-            duration: 1000
-          })
         })
     }
     // 批量删除
@@ -199,15 +193,12 @@ export default {
               ElMessage.success({ message: '删除成功', duration: 1000 })
             })
           }
-        }).catch(() => {
-          ElMessage({
-            type: 'info',
-            message: '已取消删除',
-            duration: 1000
-          })
         })
     }
-    return { checkOne, updateAllSelected, deleteItem, deleteSelected }
+    const changeCount = (skuId, newValue) => {
+      store.dispatch('cart/changeCount', { skuId, newValue })
+    }
+    return { checkOne, updateAllSelected, deleteItem, deleteSelected, changeCount }
   }
 }
 </script>
