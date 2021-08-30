@@ -61,7 +61,7 @@
                 </p>
               </td>
               <td class="tc">
-                <XtxNumbox :modelValue="goods.count" @update:modelValue="($event)=>changeCount(goods.skuId,$event)" max="99"/>
+                <XtxNumbox :modelValue="goods.count" @update:modelValue="($event)=>changeCount(goods.skuId,$event)" :max="goods.stock"/>
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ goods.nowPrice * goods.count }}</p>
