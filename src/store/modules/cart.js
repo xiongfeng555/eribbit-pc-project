@@ -71,6 +71,19 @@ export default {
     }
   },
   actions: {
+    // 批量删除
+    batchDeleteCart (ctx) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+
+        } else {
+          ctx.getters.isSelectedList.forEach(item => {
+            ctx.commit('deleteCart', item)
+            resolve()
+          })
+        }
+      })
+    },
     addCart (ctx, payload) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
