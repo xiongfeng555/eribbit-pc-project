@@ -48,6 +48,7 @@
                   <div>
                     <p class="name ellipsis">{{ goods.name }}</p>
                     <!-- 选择规格组件 -->
+                    <CartSku :attrsText="goods.attrsText" :skuId="goods.skuId"/>
                   </div>
                 </div>
               </td>
@@ -151,11 +152,12 @@
 import GoodRelevant from '@/views/goods/components/goods-relevant'
 import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import CartNone from './cart-none.vue'
+import CartNone from './components/cart-none.vue'
+import CartSku from './components/cart-sku.vue'
 
 export default {
   name: 'XtxCartPage',
-  components: { GoodRelevant, CartNone },
+  components: { GoodRelevant, CartNone, CartSku },
   setup () {
     const store = useStore()
     const checkOne = (skuId, selected) => {
