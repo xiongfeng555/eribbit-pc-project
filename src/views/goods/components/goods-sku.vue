@@ -85,8 +85,8 @@ export default {
   name: 'GoodsSku',
   props: {
     goods: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => ({})
     },
     skuId: {
       type: String,

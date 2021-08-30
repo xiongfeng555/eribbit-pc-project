@@ -67,7 +67,7 @@ export default {
     // 删除购物车项
     deleteCart (state, goods) {
       const index = state.list.findIndex(item => item.skuId === goods.skuId)
-      state.list.splice(index.Promise, 1)
+      state.list.splice(index, 1)
     },
     // 修改商品的数量
     changeCount (state, { skuId, newValue }) {
@@ -76,6 +76,21 @@ export default {
     }
   },
   actions: {
+    // 修改规格
+    updateCartSku (ctx, { oldSkuId, newSku }) {
+      return new Promise((resolve, reject) => {
+        if (ctx.rootState.user.profile.token) {
+
+        } else {
+          const oldGoods = ctx.state.list.find(item => item.skuId === oldSkuId)
+          console.log(oldGoods)
+          const { skuId, price: nowPrice, inventory: stock, specsText: attrsText } = newSku
+          const newGoods = { ...oldGoods, skuId, nowPrice, stock, attrsText }
+          ctx.commit('deleteCart', oldGoods)
+          ctx.commit('addCart', newGoods)
+        }
+      })
+    },
     // 修改商品数量
     changeCount (ctx, { skuId, newValue }) {
       return new Promise((resolve, reject) => {

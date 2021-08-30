@@ -1,13 +1,13 @@
 <template>
-  <div class="cart-sku" @click="toggle" ref="target">
-    <div class="attrs">
+  <div class="cart-sku" ref="target">
+    <div class="attrs" @click="toggle">
       <span class="ellipsis">{{attrsText}}</span>
       <i class="iconfont icon-angle-down"></i>
     </div>
     <div class="layer" v-if="visiable">
       <div class="loading" v-if="loading"></div>
-      <GoodsSku :goods="goods" :skuId="skuId" v-else/>
-      <XtxButton v-if="goods" size="mini" type="primary" @click="submit()" style="margin-left:60px">确认</XtxButton>
+      <GoodsSku :goods="goods" :skuId="skuId" v-else @change="changeSku"/>
+      <XtxButton v-if="goods" size="mini" type="primary" @click="submit" style="margin-left:60px">确认</XtxButton>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
       default: ''
     }
   },
-  setup (props) {
+  setup (props, { emit }) {
     const visiable = ref(false)
     const target = ref(null)
     const goods = ref(null)
@@ -40,10 +40,12 @@ export default {
       visiable.value = true
       getGoodsSku(props.skuId).then(data => {
         goods.value = data.result
+        console.log(goods.value)
         loading.value = false
       })
     }
     const close = () => {
+      console.log('false')
       visiable.value = false
     }
     const toggle = () => {
@@ -52,7 +54,16 @@ export default {
     onClickOutside(target, () => {
       close()
     })
-    return { visiable, toggle, target, goods, loading }
+    const currSku = ref(null)
+    const changeSku = (sku) => {
+      currSku.value = sku
+    }
+    const submit = () => {
+      if (currSku.value && currSku.value.skuId && currSku.value.skuId !== props.skuId) {
+        emit('change', currSku.value)
+      }
+    }
+    return { visiable, toggle, target, goods, loading, changeSku, submit }
   }
 }
 </script>
