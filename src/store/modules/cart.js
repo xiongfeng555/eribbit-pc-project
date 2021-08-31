@@ -1,6 +1,6 @@
 // 购物车模块
 
-import { getNewCartGoods, mergeCart, findCart } from '@/api/cart'
+import { getNewCartGoods, mergeCart, findCart, addCart } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -133,16 +133,21 @@ export default {
         }
       })
     },
+    // 加入购物车
     addCart (ctx, payload) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          addCart({ skuId: payload.skuId, count: payload.count }).then(() => {
+            ctx.commit('addCart', payload)
+            resolve()
+          })
         } else {
           ctx.commit('addCart', payload)
           resolve()
         }
       })
     },
+    // 获取新的购物车数据
     findNewGoods (ctx) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {

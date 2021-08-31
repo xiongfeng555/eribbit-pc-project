@@ -23,3 +23,8 @@ export const mergeCart = (carList) => {
 export const findCart = () => {
   return request('/member/cart', 'get')
 }
+
+// 加入购物车
+export const addCart = ({ skuId, count }) => {
+  return request('/member/cart', 'post', { skuId, count })
+}
