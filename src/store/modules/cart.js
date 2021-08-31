@@ -1,6 +1,6 @@
 // 购物车模块
 
-import { getNewCartGoods, mergeCart, findCart, addCart, deleteCart, updateCart } from '@/api/cart'
+import { getNewCartGoods, mergeCart, findCart, addCart, deleteCart, updateCart, checkAllCart } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -211,10 +211,17 @@ export default {
         }
       })
     },
+    // 全选
     clearAllSelected (ctx, selected) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          const ids = ctx.getters.validList.map(item => item.skuId)
+          checkAllCart({ selected, ids }).then(() => {
+            return findCart()
+          }).then(data => {
+            ctx.commit('setCart', data.result)
+            resolve()
+          })
         } else {
           ctx.getters.validList.forEach(goods => {
             ctx.commit('updateCart', { skuId: goods.skuId, selected })

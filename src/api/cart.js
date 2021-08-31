@@ -41,3 +41,8 @@ export const deleteCart = (ids) => {
 export const updateCart = ({ skuId, selected, count }) => {
   return request(`/member/cart/${skuId}`, 'put', { selected, count })
 }
+// 全选接口
+
+export const checkAllCart = ({ selected, ids }) => {
+  return request('/member/cart/selected', 'put', { selected, ids })
+}
