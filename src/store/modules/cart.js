@@ -98,7 +98,15 @@ export default {
     updateCartSku (ctx, { oldSkuId, newSku }) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          const oldGoods = ctx.state.list.find(item => item.skuId === oldSkuId)
+          deleteCart([oldGoods.skuId]).then(() => {
+            return addCart({ skuId: newSku.skuId, count: oldGoods.count })
+          }).then(() => {
+            return findCart()
+          }).then(data => {
+            ctx.commit('setCart', data.result)
+            resolve()
+          })
         } else {
           const oldGoods = ctx.state.list.find(item => item.skuId === oldSkuId)
           console.log(oldGoods)
@@ -177,6 +185,7 @@ export default {
         }
       })
     },
+    // 删除购物车
     deleteCart (ctx, payload) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
