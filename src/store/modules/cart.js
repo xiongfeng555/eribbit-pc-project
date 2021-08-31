@@ -37,7 +37,7 @@ export default {
     },
     // 已选商品总金额
     selectedAmount (state, getters) {
-      return getters.isSelectedList.reduce((p, c) => p + c.nowPrice * c.count, 0)
+      return getters.isSelectedList.reduce((p, c) => p + c.nowPrice * c.count * 100, 0) / 100
     },
     // 是否全选
     isSelectedAll (state, getters) {
