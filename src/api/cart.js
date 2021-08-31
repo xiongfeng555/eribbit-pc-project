@@ -28,3 +28,11 @@ export const findCart = () => {
 export const addCart = ({ skuId, count }) => {
   return request('/member/cart', 'post', { skuId, count })
 }
+
+// 删除购物车
+/**
+ * @param {Array<String>} ids -skuid数组
+ */
+export const deleteCart = (ids) => {
+  return request('/member/cart', 'delete', { ids })
+}

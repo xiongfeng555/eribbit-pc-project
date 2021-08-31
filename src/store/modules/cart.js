@@ -1,6 +1,6 @@
 // 购物车模块
 
-import { getNewCartGoods, mergeCart, findCart, addCart } from '@/api/cart'
+import { getNewCartGoods, mergeCart, findCart, addCart, deleteCart } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -124,7 +124,13 @@ export default {
     batchDeleteCart (ctx, isClear) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          const ids = ctx.getters[isClear ? 'invalidList' : 'isSelectedList'].map(item => item.skuId)
+          deleteCart(ids).then(() => {
+            return findCart()
+          }).then(data => {
+            ctx.commit('setCart', data.result)
+            resolve()
+          })
         } else {
           ctx.getters[isClear ? 'invalidList' : 'isSelectedList'].forEach(item => {
             ctx.commit('deleteCart', item)
@@ -171,7 +177,9 @@ export default {
     deleteCart (ctx, payload) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          deleteCart([payload.skuId]).then(() => {
+            ctx.commit('deleteCart', payload)
+          })
         } else {
           ctx.commit('deleteCart', payload)
           resolve()
