@@ -68,10 +68,12 @@ export default {
             token
           })
 
-          router.push(store.state.user.redirectURL)
-          ElMessage.success({
-            message: 'QQ登录成功',
-            type: 'success'
+          store.dispatch('cart/mergeCart').then(() => {
+            router.push(store.state.user.redirectURL)
+            ElMessage.success({
+              message: 'QQ登录成功',
+              type: 'success'
+            })
           })
         }).catch(error => {
           isBind.value = false

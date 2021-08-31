@@ -218,11 +218,13 @@ export default {
             mobile,
             token
           })
-          ElMessage.success({
-            message: '登录成功',
-            type: 'success'
+          store.dispatch('cart/mergeCart').then(() => {
+            ElMessage.success({
+              message: '登录成功',
+              type: 'success'
+            })
+            router.push(route.query.redirectUrl || '/')
           })
-          router.push(route.query.redirectUrl || '/')
         }
       }
     }

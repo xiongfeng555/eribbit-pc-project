@@ -155,10 +155,12 @@ export default {
         }).then(data => {
           const { id, account, avatar, mobile, nickname, token } = data.result
           store.commit('user/setUser', { id, account, avatar, mobile, nickname, token })
-          // 2. 跳转到来源页或者首页
-          router.push(store.state.user.redirectUrl)
-          // 3. 成功提示
-          ElMessage({ type: 'success', text: 'QQ完善信息成功' })
+          store.dispatch('cart/mergeCart').then(() => {
+            // 2. 跳转到来源页或者首页
+            router.push(store.state.user.redirectUrl)
+            // 3. 成功提示
+            ElMessage({ type: 'success', text: 'QQ完善信息成功' })
+          })
         }).catch(e => {
           ElMessage.error(e.response.data.message)
         })

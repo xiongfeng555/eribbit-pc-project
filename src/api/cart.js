@@ -10,3 +10,11 @@ export const getNewCartGoods = (skuId) => {
 export const getGoodsSku = (skuId) => {
   return request(`/goods/sku/${skuId}`, 'get')
 }
+
+/**
+ *
+ * @param {Array<Object>} carList - 购物车信息列表
+ */
+export const mergeCart = (carList) => {
+  return request('/member/cart/merge', 'post', carList)
+}
