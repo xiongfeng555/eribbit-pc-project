@@ -36,3 +36,8 @@ export const addCart = ({ skuId, count }) => {
 export const deleteCart = (ids) => {
   return request('/member/cart', 'delete', { ids })
 }
+
+// 修改购物车状态
+export const updateCart = ({ skuId, selected, count }) => {
+  return request(`/member/cart/${skuId}`, 'put', { selected, count })
+}

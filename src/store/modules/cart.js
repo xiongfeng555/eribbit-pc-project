@@ -1,6 +1,6 @@
 // 购物车模块
 
-import { getNewCartGoods, mergeCart, findCart, addCart, deleteCart } from '@/api/cart'
+import { getNewCartGoods, mergeCart, findCart, addCart, deleteCart, updateCart } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -113,7 +113,10 @@ export default {
     changeCount (ctx, { skuId, newValue }) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          updateCart({ skuId, count: newValue }).then(() => {
+            ctx.commit('changeCount', { skuId, newValue })
+            resolve()
+          })
         } else {
           ctx.commit('changeCount', { skuId, newValue })
           resolve()
@@ -186,10 +189,13 @@ export default {
         }
       })
     },
+    // 更改购物车状态
     updateCart (ctx, payload) {
       return new Promise((resolve, reject) => {
         if (ctx.rootState.user.profile.token) {
-
+          updateCart(payload).then(() => {
+            ctx.commit('updateCart', payload)
+          })
         } else {
           ctx.commit('updateCart', payload)
           resolve()
