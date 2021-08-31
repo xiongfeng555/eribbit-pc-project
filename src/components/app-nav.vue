@@ -65,6 +65,7 @@ export default defineComponent({
     // 退出登录
     const logout = () => {
       store.commit('user/setUser', {})
+      store.commit('cart/setCart', [])
       router.push('/login')
     }
     return {
