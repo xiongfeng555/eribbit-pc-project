@@ -1,6 +1,6 @@
 // 购物车模块
 
-import { getNewCartGoods, mergeCart } from '@/api/cart'
+import { getNewCartGoods, mergeCart, findCart } from '@/api/cart'
 
 export default {
   namespaced: true,
@@ -145,15 +145,22 @@ export default {
     },
     findNewGoods (ctx) {
       return new Promise((resolve, reject) => {
-        const promiseArr = ctx.state.list.map(item => {
-          return getNewCartGoods(item.skuId)
-        })
-        Promise.all(promiseArr).then(results => {
-          results.forEach((goods, i) => {
-            ctx.commit('updateCart', { ...goods.result, skuId: ctx.state.list[i].skuId })
+        if (ctx.rootState.user.profile.token) {
+          findCart().then(data => {
+            ctx.commit('setCart', data.result)
+            resolve()
           })
-          resolve()
-        })
+        } else {
+          const promiseArr = ctx.state.list.map(item => {
+            return getNewCartGoods(item.skuId)
+          })
+          Promise.all(promiseArr).then(results => {
+            results.forEach((goods, i) => {
+              ctx.commit('updateCart', { ...goods.result, skuId: ctx.state.list[i].skuId })
+            })
+            resolve()
+          })
+        }
       })
     },
     deleteCart (ctx, payload) {
