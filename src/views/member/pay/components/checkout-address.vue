@@ -10,10 +10,25 @@
       <a href="javascript:;">修改地址</a>
     </div>
     <div class="action">
-      <XtxButton class="btn">切换地址</XtxButton>
+      <XtxButton class="btn" @click="dialogFormVisible = true">切换地址</XtxButton>
       <XtxButton class="btn">添加地址</XtxButton>
     </div>
   </div>
+  <el-dialog title="切换收货地址" v-model="dialogFormVisible">
+        <div class="text item" v-for="item in list" :key="item.id" @click="selectedAddress=item" :class="{active:selectedAddress&&selectedAddress.id === item.id}">
+       <ul>
+         <li><span>收<i/>货<i/>人：</span>{{item.receiver}}</li>
+         <li><span>联系方式：</span>{{item.contact}}</li>
+         <li><span>收货地址：</span>{{item.fullLocation.replace(/ /g,'')+item.address}}</li>
+       </ul>
+     </div>
+  <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="confirmAddressFn">确 定</el-button>
+    </span>
+  </template>
+</el-dialog>
 </template>
 <script>
 import { ref } from 'vue'
@@ -25,7 +40,9 @@ export default {
       default: () => []
     }
   },
-  setup (props) {
+  emits: ['change'],
+  setup (props, { emit }) {
+    console.log(props.list)
     const showAddress = ref(null)
     const addressDefault = props.list.find(item => item.isDefault === 1)
     if (addressDefault) {
@@ -33,7 +50,18 @@ export default {
     } else {
       showAddress.value = props.list.length ? props.list[0] : null
     }
-    return { showAddress }
+    emit('change', showAddress.value ? showAddress.value.id : null)
+    const dialogFormVisible = ref(false)
+    const selectedAddress = ref(null)
+    // 确认切换地址
+    const confirmAddressFn = () => {
+      if (selectedAddress.value) {
+        showAddress.value = selectedAddress.value
+        dialogFormVisible.value = false
+        emit('change', selectedAddress.value.id)
+      }
+    }
+    return { showAddress, dialogFormVisible, selectedAddress, confirmAddressFn }
   }
 }
 </script>
@@ -47,6 +75,20 @@ export default {
     min-height: 90px;
     display: flex;
     align-items: center;
+    &.item {
+      border: 1px solid #f5f5f5;
+      margin-bottom: 10px;
+      cursor: pointer;
+      &.active,&:hover {
+        border-color: $xtxColor;
+        background: lighten($xtxColor,50%);
+      }
+      > ul {
+        padding: 10px;
+        font-size: 14px;
+        line-height: 30px;
+      }
+    }
     .none {
       line-height: 90px;
       color: #999;
@@ -90,5 +132,25 @@ export default {
       }
     }
   }
+}
+.text {
+    flex: 1;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    &.item {
+      border: 1px solid #f5f5f5;
+      margin-bottom: 10px;
+      cursor: pointer;
+      &.active,&:hover {
+        border-color: $xtxColor;
+        background: lighten($xtxColor,50%);
+      }
+      > ul {
+        padding: 10px;
+        font-size: 14px;
+        line-height: 30px;
+      }
+    }
 }
 </style>
