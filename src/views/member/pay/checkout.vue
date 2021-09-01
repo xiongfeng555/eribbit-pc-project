@@ -10,21 +10,7 @@
         <!-- 收货地址 -->
         <h3 class="box-title">收货地址</h3>
         <div class="box-body">
-          <div class="address">
-            <div class="text">
-              <!-- <div class="none">您需要先添加收货地址才可提交订单。</div> -->
-              <ul>
-                <li><span>收<i/>货<i/>人：</span>朱超</li>
-                <li><span>联系方式：</span>132****2222</li>
-                <li><span>收货地址：</span>海南省三亚市解放路108号物质大厦1003室</li>
-              </ul>
-              <a href="javascript:;">修改地址</a>
-            </div>
-            <div class="action">
-              <XtxButton class="btn">切换地址</XtxButton>
-              <XtxButton class="btn">添加地址</XtxButton>
-            </div>
-          </div>
+          <CheckoutAddress/>
         </div>
         <!-- 商品信息 -->
         <h3 class="box-title">商品信息</h3>
@@ -40,20 +26,20 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in 4" :key="i">
+              <tr v-for="item in order.goods" :key="item.skuId">
                 <td>
                   <a href="javascript:;" class="info">
-                    <img src="https://yanxuan-item.nosdn.127.net/cd9b2550cde8bdf98c9d083d807474ce.png" alt="">
-                    <div class="right">
-                      <p>轻巧多用锅雪平锅 麦饭石不粘小奶锅煮锅</p>
-                      <p>颜色：白色 尺寸：10cm 产地：日本</p>
+                    <img :src="item.picture" alt="">
+                    <div class="rig{ht">
+                      <p>{{item.name}}</p>
+                      <p>{{item.attrsText}}</p>
                     </div>
                   </a>
                 </td>
-                <td>&yen;100.00</td>
-                <td>2</td>
-                <td>&yen;200.00</td>
-                <td>&yen;200.00</td>
+                <td>&yen;{{item.price}}</td>
+                <td>{{item.count}}</td>
+                <td>&yen;{{item.totalPrice}}</td>
+                <td>&yen;{{item.totalPayPrice}}</td>
               </tr>
             </tbody>
           </table>
@@ -76,10 +62,10 @@
         <h3 class="box-title">金额明细</h3>
         <div class="box-body">
           <div class="total">
-            <dl><dt>商品件数：</dt><dd>5件</dd></dl>
-            <dl><dt>商品总价：</dt><dd>¥5697.00</dd></dl>
-            <dl><dt>运<i></i>费：</dt><dd>¥0.00</dd></dl>
-            <dl><dt>应付总额：</dt><dd class="price">¥5697.00</dd></dl>
+            <dl><dt>商品件数：</dt><dd>{{order.summary.goodsCount}}件</dd></dl>
+            <dl><dt>商品总价：</dt><dd>¥{{order.summary.totalPrice}}</dd></dl>
+            <dl><dt>运<i></i>费：</dt><dd>¥{{order.summary.postFee}}</dd></dl>
+            <dl><dt>应付总额：</dt><dd class="price">¥{{order.summary.totalPayPrice}}</dd></dl>
           </div>
         </div>
         <!-- 提交订单 -->
@@ -91,8 +77,22 @@
   </div>
 </template>
 <script>
+import CheckoutAddress from './components/checkout-address.vue'
+import { createOrder } from '@/api/order'
+import { ref } from 'vue'
 export default {
-  name: 'XtxPayCheckoutPage'
+  name: 'XtxPayCheckoutPage',
+  components: {
+    CheckoutAddress
+  },
+  setup () {
+    const order = ref(null)
+    createOrder().then((data) => {
+      order.value = data.result
+      console.log(order.value)
+    })
+    return { order }
+  }
 }
 </script>
 <style scoped lang="scss">
