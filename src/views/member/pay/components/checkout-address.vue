@@ -11,7 +11,7 @@
     </div>
     <div class="action">
       <XtxButton class="btn" @click="dialogFormVisible = true">切换地址</XtxButton>
-      <XtxButton class="btn">添加地址</XtxButton>
+      <XtxButton class="btn" @click="openEditAddress">添加地址</XtxButton>
     </div>
   </div>
   <el-dialog title="切换收货地址" v-model="dialogFormVisible">
@@ -29,11 +29,14 @@
     </span>
   </template>
 </el-dialog>
+<CheckoutEdit ref="checkoutEdit"/>
 </template>
 <script>
+import CheckoutEdit from './checkout-edit.vue'
 import { ref } from 'vue'
 export default {
   name: 'CheckoutAddress',
+  components: { CheckoutEdit },
   props: {
     list: {
       type: Array,
@@ -61,7 +64,11 @@ export default {
         emit('change', selectedAddress.value.id)
       }
     }
-    return { showAddress, dialogFormVisible, selectedAddress, confirmAddressFn }
+    const checkoutEdit = ref(null)
+    const openEditAddress = () => {
+      checkoutEdit.value.open()
+    }
+    return { showAddress, dialogFormVisible, selectedAddress, confirmAddressFn, checkoutEdit, openEditAddress }
   }
 }
 </script>
