@@ -6,11 +6,11 @@
         <XtxBreadItem to="/cart">购物车</XtxBreadItem>
         <XtxBreadItem >填写订单</XtxBreadItem>
       </XtxBread>
-      <div class="wrapper">
+      <div class="wrapper" v-if="order">
         <!-- 收货地址 -->
         <h3 class="box-title">收货地址</h3>
         <div class="box-body">
-          <CheckoutAddress/>
+          <CheckoutAddress :list="order.userAddresses"/>
         </div>
         <!-- 商品信息 -->
         <h3 class="box-title">商品信息</h3>

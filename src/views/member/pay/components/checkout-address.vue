@@ -1,11 +1,11 @@
 <template>
   <div class="checkout-address">
     <div class="text">
-      <!-- <div class="none">您需要先添加收货地址才可提交订单。</div> -->
-      <ul>
-        <li><span>收<i/>货<i/>人：</span>朱超</li>
-        <li><span>联系方式：</span>132****2222</li>
-        <li><span>收货地址：</span>海南省三亚市解放路108号物质大厦1003室</li>
+      <div class="none" v-if="!showAddress">您需要先添加收货地址才可提交订单。</div>
+      <ul v-else>
+        <li><span>收<i/>货<i/>人：</span>{{showAddress.receiver}}</li>
+        <li><span>联系方式：</span>{{showAddress.contact}}</li>
+        <li><span>收货地址：</span>{{showAddress.fullLocation.replace(/ /g,'')+showAddress.address}}</li>
       </ul>
       <a href="javascript:;">修改地址</a>
     </div>
@@ -16,8 +16,25 @@
   </div>
 </template>
 <script>
+import { ref } from 'vue'
 export default {
-  name: 'CheckoutAddress'
+  name: 'CheckoutAddress',
+  props: {
+    list: {
+      type: Array,
+      default: () => []
+    }
+  },
+  setup (props) {
+    const showAddress = ref(null)
+    const addressDefault = props.list.find(item => item.isDefault === 1)
+    if (addressDefault) {
+      showAddress.value = addressDefault
+    } else {
+      showAddress.value = props.list.length ? props.list[0] : null
+    }
+    return { showAddress }
+  }
 }
 </script>
 <style scoped lang="scss">
