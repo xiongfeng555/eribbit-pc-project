@@ -140,7 +140,7 @@
           共 {{ $store.getters["cart/validTotal"] }} 件商品，已选择
           {{ $store.getters["cart/selectedTotal"] }} 件，商品合计：
           <span class="red">¥{{ $store.getters["cart/selectedAmount"] }}</span>
-          <XtxButton type="primary">下单结算</XtxButton>
+          <XtxButton type="primary" @click="checkOut" v-if="$store.getters['cart/validList'].length>0">下单结算</XtxButton>
         </div>
       </div>
       <!-- 猜你喜欢 -->
@@ -154,12 +154,14 @@ import { useStore } from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import CartNone from './components/cart-none.vue'
 import CartSku from './components/cart-sku.vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'XtxCartPage',
   components: { GoodRelevant, CartNone, CartSku },
   setup () {
     const store = useStore()
+    const router = useRouter()
     const checkOne = (skuId, selected) => {
       store.dispatch('cart/updateCart', { skuId, selected })
     }
@@ -204,7 +206,21 @@ export default {
     const changeSku = (oldSkuId, newSku) => {
       store.dispatch('cart/updateCartSku', { oldSkuId, newSku })
     }
-    return { checkOne, updateAllSelected, deleteItem, deleteSelected, changeCount, changeSku }
+    // 下单结算
+    const checkOut = () => {
+      if (store.getters['cart/isSelectedList'].length === 0) {
+        return ElMessage.warning({ message: '请至少选择一件商品' })
+      }
+      ElMessageBox.confirm('确定下单结算吗?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          router.push('/member/checkout')
+        })
+    }
+    return { checkOne, updateAllSelected, deleteItem, deleteSelected, changeCount, changeSku, checkOut }
   }
 }
 </script>

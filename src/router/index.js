@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import store from '@/store'
 
 const Layout = () => import('@/views/Layout.vue')
 const Home = () => import('@/views/home')
@@ -48,6 +49,14 @@ const router = createRouter({
   scrollBehavior () {
     return { left: 0, top: 0 }
   }
+})
+
+router.beforeEach((to, from, next) => {
+  const { profile } = store.state.user
+  if (!profile.token && to.path.startsWith('/member')) {
+    return next('/login?redirectUrl=' + encodeURIComponent(to.fullPath))
+  }
+  next()
 })
 
 export default router
