@@ -12,3 +12,11 @@ export const createOrder = () => {
 export const addAddress = (address) => {
   return request('/member/address', 'post', address)
 }
+
+/**
+ * 编辑收货地址信息
+ * @param {Object} address - 地址对象
+ */
+export const editAddress = (address) => {
+  return request(`/member/address/${address.id}`, 'put', address)
+}

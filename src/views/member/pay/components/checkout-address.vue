@@ -7,11 +7,11 @@
         <li><span>联系方式：</span>{{showAddress.contact}}</li>
         <li><span>收货地址：</span>{{showAddress.fullLocation.replace(/ /g,'')+showAddress.address}}</li>
       </ul>
-      <a href="javascript:;">修改地址</a>
+      <a href="javascript:;" @click="openEditAddress(showAddress)">修改地址</a>
     </div>
     <div class="action">
       <XtxButton class="btn" @click="dialogFormVisible = true">切换地址</XtxButton>
-      <XtxButton class="btn" @click="openEditAddress">添加地址</XtxButton>
+      <XtxButton class="btn" @click="openEditAddress({})">添加地址</XtxButton>
     </div>
   </div>
   <el-dialog title="切换收货地址" v-model="dialogFormVisible">
@@ -65,13 +65,19 @@ export default {
       }
     }
     const checkoutEdit = ref(null)
-    const openEditAddress = () => {
-      checkoutEdit.value.open()
+    const openEditAddress = (address) => {
+      checkoutEdit.value.open(address)
     }
     const changeEdit = (formData) => {
-      const data = JSON.stringify(formData)
-      // eslint-disable-next-line vue/no-mutating-props
-      props.list.unshift(JSON.parse(data))
+      const index = props.list.findIndex(item => item.id === formData.id)
+      if (index > -1) {
+        console.log(formData)
+        showAddress.value = formData
+      } else {
+        const data = JSON.stringify(formData)
+        // eslint-disable-next-line vue/no-mutating-props
+        props.list.unshift(JSON.parse(data))
+      }
     }
     return { showAddress, dialogFormVisible, selectedAddress, confirmAddressFn, checkoutEdit, openEditAddress, changeEdit }
   }

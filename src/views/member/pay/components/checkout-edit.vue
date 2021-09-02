@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="添加地址" v-model="dialogFormVisible">
+  <el-dialog :title="`${formData.id?'修改地址信息':'添加新地址'}`" v-model="dialogFormVisible">
           <div class="xtx-form">
       <div class="xtx-form-item">
         <div class="label">收货人：</div>
@@ -49,18 +49,24 @@
 <script>
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { addAddress } from '@/api/order'
+import { addAddress, editAddress } from '@/api/order'
 export default {
   name: 'CheckoutEdit',
   setup (props, { emit }) {
     const dialogFormVisible = ref(false)
-    const open = () => {
+    const open = (address) => {
       dialogFormVisible.value = true
-      for (const key in formData) {
-        if (key === 'isDefault') {
-          formData[key] = 0
-        } else {
-          formData[key] = null
+      if (address.id) {
+        for (const key in address) {
+          formData[key] = address[key]
+        }
+      } else {
+        for (const key in formData) {
+          if (key === 'isDefault') {
+            formData[key] = 0
+          } else {
+            formData[key] = null
+          }
         }
       }
     }
@@ -85,11 +91,20 @@ export default {
       formData.fullLocation = result.fullLocation
     }
     const submit = () => {
-      addAddress(formData).then(() => {
-        ElMessage.success({ message: '添加成功' })
-        dialogFormVisible.value = false
-        emit('changeEdit', formData)
-      })
+      if (formData.id) {
+        editAddress(formData).then(data => {
+          ElMessage.success({ message: '修改成功' })
+          dialogFormVisible.value = false
+          emit('changeEdit', formData)
+        })
+      } else {
+        addAddress(formData).then((data) => {
+          ElMessage.success({ message: '添加成功' })
+          dialogFormVisible.value = false
+          formData.id = data.result.id
+          emit('changeEdit', formData)
+        })
+      }
     }
     return { dialogFormVisible, open, formData, changeCity, submit }
   }
