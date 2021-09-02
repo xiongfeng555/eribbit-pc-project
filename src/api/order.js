@@ -20,3 +20,10 @@ export const addAddress = (address) => {
 export const editAddress = (address) => {
   return request(`/member/address/${address.id}`, 'put', address)
 }
+/**
+ * 提交订单
+ * @param {Object} order - 订单信息对象
+ */
+export const submitOrder = (order) => {
+  return request('/member/order', 'post', order)
+}

@@ -70,7 +70,7 @@
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <XtxButton type="primary">提交订单</XtxButton>
+          <XtxButton type="primary" @click="submit">提交订单</XtxButton>
         </div>
       </div>
     </div>
@@ -78,8 +78,11 @@
 </template>
 <script>
 import CheckoutAddress from './components/checkout-address.vue'
-import { createOrder } from '@/api/order'
-import { ref } from 'vue'
+import { createOrder, submitOrder } from '@/api/order'
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+
 export default {
   name: 'XtxPayCheckoutPage',
   components: {
@@ -87,16 +90,35 @@ export default {
   },
   setup () {
     const order = ref(null)
+    const router = useRouter()
     createOrder().then((data) => {
       order.value = data.result
+      requestParams.goods = data.result.goods.map(item => ({ skuId: item.skuId, count: item.count }))
     })
-    const addressId = ref(null)
+    // 需要提交的字段
+    const requestParams = reactive({
+      addressId: null,
+      deliveryTimeType: 1,
+      payType: 1,
+      buyerMessage: '',
+      goods: []
+    })
     const changeAddress = (id) => {
-      addressId.value = id
+      requestParams.addressId = id
+    }
+    const submit = () => {
+      if (!requestParams.addressId) {
+        ElMessage.warning({ message: '亲，请选择配送地址' })
+      }
+      submitOrder(requestParams).then((data) => {
+        ElMessage.success({ message: '订单提交成功' })
+        router.push({ path: '/member/pay', query: { id: data.result.id } })
+      })
     }
     return {
       order,
-      changeAddress
+      changeAddress,
+      submit
     }
   }
 }
