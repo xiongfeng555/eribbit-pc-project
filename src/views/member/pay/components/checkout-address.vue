@@ -29,7 +29,7 @@
     </span>
   </template>
 </el-dialog>
-<CheckoutEdit ref="checkoutEdit"/>
+<CheckoutEdit ref="checkoutEdit" @changeEdit="changeEdit"/>
 </template>
 <script>
 import CheckoutEdit from './checkout-edit.vue'
@@ -68,7 +68,12 @@ export default {
     const openEditAddress = () => {
       checkoutEdit.value.open()
     }
-    return { showAddress, dialogFormVisible, selectedAddress, confirmAddressFn, checkoutEdit, openEditAddress }
+    const changeEdit = (formData) => {
+      const data = JSON.stringify(formData)
+      // eslint-disable-next-line vue/no-mutating-props
+      props.list.unshift(JSON.parse(data))
+    }
+    return { showAddress, dialogFormVisible, selectedAddress, confirmAddressFn, checkoutEdit, openEditAddress, changeEdit }
   }
 }
 </script>

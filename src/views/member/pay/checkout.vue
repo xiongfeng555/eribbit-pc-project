@@ -89,7 +89,6 @@ export default {
     const order = ref(null)
     createOrder().then((data) => {
       order.value = data.result
-      console.log(order.value)
     })
     const addressId = ref(null)
     const changeAddress = (id) => {
