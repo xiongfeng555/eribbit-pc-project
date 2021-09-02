@@ -4,7 +4,7 @@
       <div class="none" v-if="!showAddress">您需要先添加收货地址才可提交订单。</div>
       <ul v-else>
         <li><span>收<i/>货<i/>人：</span>{{showAddress.receiver}}</li>
-        <li><span>联系方式：</span>{{showAddress.contact}}</li>
+        <li><span>联系方式：</span>{{showAddress.contact.replace(/^(\d{3})\d{4}(\d{4})/,'$1****$2')}}</li>
         <li><span>收货地址：</span>{{showAddress.fullLocation.replace(/ /g,'')+showAddress.address}}</li>
       </ul>
       <a href="javascript:;" @click="openEditAddress(showAddress)">修改地址</a>
