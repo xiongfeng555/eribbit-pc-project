@@ -26,7 +26,6 @@ export default {
     Swiper
   },
   setup (props) {
-    console.log('1')
     const goodsList = ref([])
     findRelevantGoods(props.goodsId).then(data => {
       const pageSize = 4
@@ -34,8 +33,6 @@ export default {
       for (let i = 0; i < pageTotal; i++) {
         goodsList.value.push(data.result.slice(pageSize * i, pageSize * i + 4))
       }
-
-      console.log(goodsList.value)
     })
     return { goodsList }
   }
