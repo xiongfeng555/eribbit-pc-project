@@ -90,6 +90,9 @@ export default {
     color: $xtxColor;
   }
 }
+.xtx-pay-page{
+    background: #f5f5f5;
+}
 .pay-info {
   background: #fff;
   display: flex;
