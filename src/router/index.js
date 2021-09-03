@@ -10,6 +10,7 @@ const Login = () => import('@/views/login/index')
 const LoginCallback = () => import('@/views/login/callback.vue')
 const Cart = () => import('@/views/cart/index')
 const CheckOut = () => import('@/views/member/pay/checkout.vue')
+const Pay = () => import('@/views/member/pay/index.vue')
 
 const routes = [
   // 一级路由布局
@@ -31,7 +32,8 @@ const routes = [
       },
       { path: '/product/:id', component: Goods },
       { path: '/cart', component: Cart },
-      { path: '/member/checkout', component: CheckOut }
+      { path: '/member/checkout', component: CheckOut },
+      { path: '/member/pay', component: Pay }
     ]
   },
   {
