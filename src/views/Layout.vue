@@ -31,6 +31,6 @@ export default {
 <style lang="scss" scoped>
   .app-main{
     // min-height: 600px;
-    background: #fff;
+    background: #f5f5f5;
   }
 </style>
