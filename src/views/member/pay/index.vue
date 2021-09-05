@@ -65,6 +65,7 @@ export default {
     const order = ref(null)
     findOrder(route.query.id).then(data => {
       order.value = data.result
+      console.log(data.result)
       start(data.result.countdown)
     })
     const { timeText, start } = downMinuteTime()

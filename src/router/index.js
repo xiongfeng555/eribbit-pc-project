@@ -45,9 +45,9 @@ const routes = [
         path: '/member',
         component: MemberLayout,
         children: [
-          { path: '', component: MemberHome },
+          { path: '/member', component: MemberHome },
           {
-            path: 'order',
+            path: '/member/order',
             component: { render: () => h(<RouterView/>) },
             children: [{
               path: '',
