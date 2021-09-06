@@ -43,11 +43,12 @@ export default {
     const myCurrentPage = ref(1)
     // 按钮个数
     const btnCount = 5
+
     watch(props, () => {
       myTotal.value = props.total
       myPageSize.value = props.pageSize
       myCurrentPage.value = props.currentPage
-    })
+    }, { immediate: true })
     // 重点：根据上述数据得到（总页数，起始页码，结束页码，按钮数组）
     const pager = computed(() => {
       // 计算总页数
@@ -79,12 +80,12 @@ export default {
       const nowValue = i + myCurrentPage.value
       if (nowValue < 1 || nowValue > pager.value.pageCount) return
       myCurrentPage.value = nowValue
-      emit('change', myCurrentPage)
+      emit('change', myCurrentPage.value)
     }
 
     const jumpPage = (i) => {
       myCurrentPage.value = i
-      emit('change', myCurrentPage)
+      emit('change', myCurrentPage.value)
     }
 
     return { pager, myCurrentPage, changePage, jumpPage }
