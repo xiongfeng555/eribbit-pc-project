@@ -11,7 +11,7 @@
         <div class="none" v-if="!loading && orderList.length === 0">
           暂无数据
         </div>
-        <OrderItem v-for="item in orderList" :key="item.id" :order="item" @cancel-order="cancel"/>
+        <OrderItem v-for="item in orderList" :key="item.id" :order="item" @cancel-order="cancel" @order-delete="deleteOrder"/>
       </el-tab-pane>
     </el-tabs>
     <XtxPagination v-if="total>0" :currentPage="requestParams.page" :pageSize="requestParams.pageSize" :total ='total' @change="change"/>
@@ -22,8 +22,9 @@
 import { orderStatus } from '@/api/constants'
 import { ref, reactive, watch } from 'vue'
 import OrderItem from './components/order-item.vue'
-import { findOrderList } from '@/api/order'
+import { findOrderList, deleteOrders } from '@/api/order'
 import OrderCancel from './components/order-cancel.vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 export default {
   components: { OrderItem, OrderCancel },
@@ -39,16 +40,21 @@ export default {
     const orderList = ref([])
     const loading = ref(false)
     const total = ref(0)
-    watch(
-      requestParams,
-      () => {
-        loading.value = true
-        total.value = 0
+    const findOrderListFn = () => {
+      loading.value = true
+      total.value = 0
+      findOrderList(requestParams).then(data => {
         findOrderList(requestParams).then((data) => {
           orderList.value = data.result.items
           loading.value = false
           total.value = data.result.counts
         })
+      })
+    }
+    watch(
+      requestParams,
+      () => {
+        findOrderListFn()
       },
       { immediate: true }
     )
@@ -64,7 +70,23 @@ export default {
     const cancel = (order) => {
       orderCancel.value.open(order)
     }
-    return { activeName, orderStatus, orderList, handleClick, loading, total, requestParams, change, orderCancel, cancel }
+    const deleteOrder = (id) => {
+      ElMessageBox.confirm('您确认删除该条订单吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          deleteOrders([id]).then(() => {
+            findOrderListFn()
+            ElMessage({
+              type: 'success',
+              message: '删除成功!'
+            })
+          })
+        })
+    }
+    return { activeName, orderStatus, orderList, handleClick, loading, total, requestParams, change, orderCancel, cancel, deleteOrder }
   }
 }
 </script>

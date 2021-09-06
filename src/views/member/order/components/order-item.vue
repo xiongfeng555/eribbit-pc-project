@@ -8,7 +8,7 @@
         <b>付款截止：{{timeText}}</b>
       </span>
          <!-- 已完成 已取消 -->
-      <a v-if="[5,6].includes(order.orderState)" href="javascript:;" class="del">删除</a>
+      <a v-if="[5,6].includes(order.orderState)" href="javascript:;" class="del" @click="$emit('order-delete',order.id)">删除</a>
     </div>
     <div class="body">
       <div class="column goods">
@@ -68,6 +68,7 @@
 <script>
 import { orderStatus } from '@/api/constants'
 import { downMinuteTime } from '@/hooks'
+
 import dayjs from 'dayjs'
 export default {
   props: {
