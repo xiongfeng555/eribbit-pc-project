@@ -11,18 +11,31 @@
         <div class="none" v-if="!loading && orderList.length === 0">
           暂无数据
         </div>
-        <OrderItem v-for="item in orderList" :key="item.id" :order="item" @cancel-order="cancel" @order-delete="deleteOrder"/>
+        <OrderItem
+          v-for="item in orderList"
+          :key="item.id"
+          :order="item"
+          @cancel-order="cancel"
+          @order-delete="deleteOrder"
+          @confirm-order="onConfirmOrder"
+        />
       </el-tab-pane>
     </el-tabs>
-    <XtxPagination v-if="total>0" :currentPage="requestParams.page" :pageSize="requestParams.pageSize" :total ='total' @change="change"/>
+    <XtxPagination
+      v-if="total > 0"
+      :currentPage="requestParams.page"
+      :pageSize="requestParams.pageSize"
+      :total="total"
+      @change="change"
+    />
   </div>
-  <OrderCancel ref="orderCancel"/>
+  <OrderCancel ref="orderCancel" />
 </template>
 <script>
 import { orderStatus } from '@/api/constants'
 import { ref, reactive, watch } from 'vue'
 import OrderItem from './components/order-item.vue'
-import { findOrderList, deleteOrders } from '@/api/order'
+import { findOrderList, deleteOrders, confirmOrder } from '@/api/order'
 import OrderCancel from './components/order-cancel.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
@@ -43,7 +56,7 @@ export default {
     const findOrderListFn = () => {
       loading.value = true
       total.value = 0
-      findOrderList(requestParams).then(data => {
+      findOrderList(requestParams).then((data) => {
         findOrderList(requestParams).then((data) => {
           orderList.value = data.result.items
           loading.value = false
@@ -75,18 +88,45 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(() => {
-          deleteOrders([id]).then(() => {
-            findOrderListFn()
-            ElMessage({
-              type: 'success',
-              message: '删除成功!'
-            })
+      }).then(() => {
+        deleteOrders([id]).then(() => {
+          findOrderListFn()
+          ElMessage({
+            type: 'success',
+            message: '删除成功!'
           })
         })
+      })
     }
-    return { activeName, orderStatus, orderList, handleClick, loading, total, requestParams, change, orderCancel, cancel, deleteOrder }
+    const onConfirmOrder = (order) => {
+      ElMessageBox.confirm('您确认收到货吗？确认后货款将会打给卖家', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        confirmOrder(order.id).then(() => {
+          order.orderState = 4
+          ElMessage({
+            type: 'success',
+            message: '确认收货成功!'
+          })
+        })
+      })
+    }
+    return {
+      activeName,
+      orderStatus,
+      orderList,
+      handleClick,
+      loading,
+      total,
+      requestParams,
+      change,
+      orderCancel,
+      cancel,
+      deleteOrder,
+      onConfirmOrder
+    }
   }
 }
 </script>
@@ -101,19 +141,20 @@ export default {
     }
   }
   .loading {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: rgba(255,255,255,.9) url(../../../assets/images/loading.gif) no-repeat center;
-}
-.none {
-  height: 400px;
-  text-align: center;
-  line-height: 400px;
-  color: #999;
-}
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9) url(../../../assets/images/loading.gif)
+      no-repeat center;
+  }
+  .none {
+    height: 400px;
+    text-align: center;
+    line-height: 400px;
+    color: #999;
+  }
   .order-list {
     background: #fff;
     padding: 20px;
