@@ -18,6 +18,7 @@
           @cancel-order="cancel"
           @order-delete="deleteOrder"
           @confirm-order="onConfirmOrder"
+          @logistic-order="onLogisticOrder"
         />
       </el-tab-pane>
     </el-tabs>
@@ -30,6 +31,7 @@
     />
   </div>
   <OrderCancel ref="orderCancel" />
+  <OrderLogistic ref="logisticDom"/>
 </template>
 <script>
 import { orderStatus } from '@/api/constants'
@@ -38,9 +40,10 @@ import OrderItem from './components/order-item.vue'
 import { findOrderList, deleteOrders, confirmOrder } from '@/api/order'
 import OrderCancel from './components/order-cancel.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import OrderLogistic from './components/order-logistics.vue'
 
 export default {
-  components: { OrderItem, OrderCancel },
+  components: { OrderItem, OrderCancel, OrderLogistic },
   setup () {
     const activeName = ref('all')
     // 查询订单参数
@@ -113,6 +116,10 @@ export default {
         })
       })
     }
+    const logisticDom = ref(null)
+    const onLogisticOrder = (order) => {
+      logisticDom.value.open(order)
+    }
     return {
       activeName,
       orderStatus,
@@ -125,7 +132,9 @@ export default {
       orderCancel,
       cancel,
       deleteOrder,
-      onConfirmOrder
+      onConfirmOrder,
+      logisticDom,
+      onLogisticOrder
     }
   }
 }

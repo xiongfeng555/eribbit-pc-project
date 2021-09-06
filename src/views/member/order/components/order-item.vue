@@ -14,7 +14,7 @@
       <div class="column goods">
         <ul>
           <li v-for="item in order.skus" :key="item.id">
-            <router-link class="image" :to="`/product/${item.id}`">
+            <router-link class="image" :to="`/product/${item.spuId}`">
               <img
                 :src="item.image"
                 alt=""
@@ -39,7 +39,7 @@
         <!-- 待收货：查看物流 -->
         <!-- 待评价：评价商品 -->
         <!-- 已完成：查看评价 -->
-        <p v-if="order.orderState===3"><a href="javascript:;" class="green">查看物流</a></p>
+        <p v-if="order.orderState===3"><a href="javascript:;" class="green" @click="$emit('logistic-order',order)">查看物流</a></p>
         <p v-if="order.orderState===4"><a href="javascript:;" class="green">评价商品</a></p>
         <p v-if="order.orderState===5"><a href="javascript:;" class="green">查看评价</a></p>
       </div>
