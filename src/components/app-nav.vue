@@ -28,7 +28,7 @@
           <span class="line">|</span>
         </template>
 
-        <el-menu-item index="3">我的订单</el-menu-item>
+        <router-link to="/member"><el-menu-item index="3">我的订单</el-menu-item></router-link>
         <span class="line">|</span>
         <el-menu-item index="4">会员中心</el-menu-item>
         <span class="line">|</span>

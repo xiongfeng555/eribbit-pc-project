@@ -1,13 +1,17 @@
 <template>
   <div class="order-member">
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane
         :label="item.label"
         :name="item.name"
         v-for="item in orderStatus"
         :key="item"
       >
-    <OrderItem v-for="item in orderList" :key="item.id" :order="item"/>
+        <div v-if="loading" class="loading"></div>
+        <div class="none" v-if="!loading && orderList.length === 0">
+          暂无数据
+        </div>
+        <OrderItem v-for="item in orderList" :key="item.id" :order="item" />
       </el-tab-pane>
     </el-tabs>
     <XtxPagination />
@@ -15,9 +19,10 @@
 </template>
 <script>
 import { orderStatus } from '@/api/constants'
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import OrderItem from './components/order-item.vue'
 import { findOrderList } from '@/api/order'
+
 export default {
   components: { OrderItem },
   setup () {
@@ -30,13 +35,24 @@ export default {
     })
     // 订单列表
     const orderList = ref([])
-    // 查询订单
-    findOrderList(requestParams).then(data => {
-      orderList.value = data.result.items
-      console.log(orderList.value)
-    })
+    const loading = ref(false)
+    watch(
+      requestParams,
+      () => {
+        loading.value = true
+        findOrderList(requestParams).then((data) => {
+          orderList.value = data.result.items
+          loading.value = false
+        })
+      },
+      { immediate: true }
+    )
+    const handleClick = ({ index }) => {
+      requestParams.page = 1
+      requestParams.orderState = index
+    }
 
-    return { activeName, orderStatus, orderList }
+    return { activeName, orderStatus, orderList, handleClick, loading }
   }
 }
 </script>
@@ -50,10 +66,23 @@ export default {
       padding-left: 15px !important ;
     }
   }
+  .loading {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(255,255,255,.9) url(../../../assets/images/loading.gif) no-repeat center;
+}
+.none {
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
+  color: #999;
+}
   .order-list {
     background: #fff;
     padding: 20px;
   }
-
 }
 </style>
