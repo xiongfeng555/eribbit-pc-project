@@ -14,7 +14,7 @@
         <OrderItem v-for="item in orderList" :key="item.id" :order="item" />
       </el-tab-pane>
     </el-tabs>
-    <XtxPagination />
+    <XtxPagination v-if="total>0" :currentPage="requestParams.page" :pageSize="requestParams.pageSize" :total ='total' @change="change"/>
   </div>
 </template>
 <script>
@@ -36,13 +36,16 @@ export default {
     // 订单列表
     const orderList = ref([])
     const loading = ref(false)
+    const total = ref(0)
     watch(
       requestParams,
       () => {
         loading.value = true
+        total.value = 0
         findOrderList(requestParams).then((data) => {
           orderList.value = data.result.items
           loading.value = false
+          total.value = data.result.counts
         })
       },
       { immediate: true }
@@ -51,8 +54,11 @@ export default {
       requestParams.page = 1
       requestParams.orderState = index
     }
-
-    return { activeName, orderStatus, orderList, handleClick, loading }
+    const change = ($event) => {
+      console.log($event)
+      requestParams.page = $event
+    }
+    return { activeName, orderStatus, orderList, handleClick, loading, total, requestParams, change }
   }
 }
 </script>
