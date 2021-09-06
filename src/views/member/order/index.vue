@@ -11,20 +11,22 @@
         <div class="none" v-if="!loading && orderList.length === 0">
           暂无数据
         </div>
-        <OrderItem v-for="item in orderList" :key="item.id" :order="item" />
+        <OrderItem v-for="item in orderList" :key="item.id" :order="item" @cancel-order="cancel"/>
       </el-tab-pane>
     </el-tabs>
     <XtxPagination v-if="total>0" :currentPage="requestParams.page" :pageSize="requestParams.pageSize" :total ='total' @change="change"/>
   </div>
+  <OrderCancel ref="orderCancel"/>
 </template>
 <script>
 import { orderStatus } from '@/api/constants'
 import { ref, reactive, watch } from 'vue'
 import OrderItem from './components/order-item.vue'
 import { findOrderList } from '@/api/order'
+import OrderCancel from './components/order-cancel.vue'
 
 export default {
-  components: { OrderItem },
+  components: { OrderItem, OrderCancel },
   setup () {
     const activeName = ref('all')
     // 查询订单参数
@@ -58,13 +60,17 @@ export default {
       console.log($event)
       requestParams.page = $event
     }
-    return { activeName, orderStatus, orderList, handleClick, loading, total, requestParams, change }
+    const orderCancel = ref(null)
+    const cancel = (order) => {
+      orderCancel.value.open(order)
+    }
+    return { activeName, orderStatus, orderList, handleClick, loading, total, requestParams, change, orderCancel, cancel }
   }
 }
 </script>
 <style lang="scss">
 .order-member {
-  height: 100%;
+  min-height: 600px;
   background: #fff;
   .el-tabs {
     background: #fff !important;
