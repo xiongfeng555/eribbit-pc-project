@@ -1,5 +1,5 @@
 <template>
-    <div class="detail-action">
+    <div class="detail-action" v-if="order">
       <div class="state">
         <span class="iconfont icon-order-unpay"></span>
         <p>{{orderStatus[order.orderState].label}}</p>
@@ -12,7 +12,7 @@
       <!-- 待付款 -->
       <template v-if="order.orderState === 1">
         <XtxButton @click="$router.push('/member/pay?id='+order.id)" type="primary" size="small">立即付款</XtxButton>
-        <XtxButton type="gray" size="small">取消订单</XtxButton>
+        <XtxButton type="gray" size="small" @click="cancel">取消订单</XtxButton>
       </template>
       <!-- 待发货 -->
       <template v-if="order.orderState === 2">
@@ -37,12 +37,18 @@
       </template>
       <!-- 已取消 -->
     </div>
+    <Teleport to="#model">
+      <OrderCancel ref="orderCancel"/>
+    </Teleport>
     </div>
 </template>
 <script>
 import { orderStatus } from '@/api/constants'
+import OrderCancel from './order-cancel.vue'
+import { ref } from 'vue'
 export default {
   name: 'OrderDetailAction',
+  components: { OrderCancel },
   props: {
     order: {
       type: Object,
@@ -50,8 +56,11 @@ export default {
     }
   },
   setup (props) {
-    console.log(props.order)
-    return { orderStatus }
+    const orderCancel = ref(null)
+    const cancel = () => {
+      orderCancel.value.open(props.order)
+    }
+    return { orderCancel, cancel, orderStatus }
   }
 }
 </script>

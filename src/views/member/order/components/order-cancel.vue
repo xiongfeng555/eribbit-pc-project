@@ -18,10 +18,8 @@
     </div>
   <template #footer>
     <span class="dialog-footer">
-      <el-button @click="cancelVisible = false">取 消</el-button>
-      <el-button type="primary" @click="submit"
-        >确 定</el-button
-      >
+     <XtxButton type="gray" @click="cancelVisible=false" style="margin-right:20px">取消</XtxButton>
+      <XtxButton type="primary" @click="submit">确认</XtxButton>
     </span>
   </template>
 </el-dialog>
@@ -55,7 +53,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .cancel-info {
   p {
     font-size: 16px;
@@ -87,5 +85,12 @@ export default {
       }
     }
   }
+
 }
+.el-dialog{
+  width: 620px !important;
+}
+ .el-dialog__footer{
+    text-align: center !important;
+  }
 </style>
