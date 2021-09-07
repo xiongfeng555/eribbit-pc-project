@@ -19,6 +19,7 @@ export default {
 .container {
   display: flex;
   padding-top: 20px;
+  margin-bottom:20px;
   .article {
     width: 1000px;
   }
