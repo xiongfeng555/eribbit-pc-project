@@ -15,6 +15,7 @@
     <DetailLogistics :order="order" v-if="[3,4,5].includes(order.orderState)" @open-logistics="open"/>
     <OrderLogistics ref="orderLogistics"/>
     <!-- 订单商品信息 -->
+    <DetailInfo :order="order"/>
   </div>
 </template>
 <script>
@@ -23,12 +24,14 @@ import DetailAction from './components/order-action.vue'
 import DetailLogistics from './components/detail-logistics.vue'
 import { findOrder } from '@/api/order'
 import OrderLogistics from './components/order-logistics.vue'
+import DetailInfo from './components/detail-info.vue'
 import { ref } from 'vue'
 export default {
   components: {
     DetailAction,
     DetailLogistics,
-    OrderLogistics
+    OrderLogistics,
+    DetailInfo
   },
   setup () {
     const route = useRoute()
