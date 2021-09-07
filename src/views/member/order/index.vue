@@ -79,7 +79,6 @@ export default {
       requestParams.orderState = index
     }
     const change = ($event) => {
-      console.log($event)
       requestParams.page = $event
     }
     const orderCancel = ref(null)

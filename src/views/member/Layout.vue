@@ -22,6 +22,7 @@ export default {
   margin-bottom:20px;
   .article {
     width: 1000px;
+    background: #fff;
   }
 }
 </style>

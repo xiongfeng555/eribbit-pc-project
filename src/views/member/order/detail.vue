@@ -12,26 +12,36 @@
       <XtxStepsItem title="订单完成" :desc="order.closeTime?order.closeTime:''"/>
     </XtxSteps>
     <!-- 物流栏 -->
+    <DetailLogistics :order="order" v-if="[3,4,5].includes(order.orderState)" @open-logistics="open"/>
+    <OrderLogistics ref="orderLogistics"/>
     <!-- 订单商品信息 -->
   </div>
 </template>
 <script>
 import { useRoute } from 'vue-router'
 import DetailAction from './components/order-action.vue'
+import DetailLogistics from './components/detail-logistics.vue'
 import { findOrder } from '@/api/order'
+import OrderLogistics from './components/order-logistics.vue'
 import { ref } from 'vue'
 export default {
   components: {
-    DetailAction
+    DetailAction,
+    DetailLogistics,
+    OrderLogistics
   },
   setup () {
     const route = useRoute()
+    const orderLogistics = ref(null)
     const order = ref(null)
     findOrder(route.params.id).then(data => {
       order.value = data.result
+      console.log(order.value)
     })
-
-    return { order }
+    const open = (myOrder) => {
+      orderLogistics.value.open(myOrder)
+    }
+    return { order, open, orderLogistics }
   }
 }
 </script>
