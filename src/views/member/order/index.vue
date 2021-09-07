@@ -41,7 +41,21 @@ import { findOrderList, deleteOrders, confirmOrder } from '@/api/order'
 import OrderCancel from './components/order-cancel.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import OrderLogistic from './components/order-logistics.vue'
-
+export const onConfirmOrder = (order) => {
+  ElMessageBox.confirm('您确认收到货吗？确认后货款将会打给卖家', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    confirmOrder(order.id).then(() => {
+      order.orderState = 4
+      ElMessage({
+        type: 'success',
+        message: '确认收货成功!'
+      })
+    })
+  })
+}
 export default {
   components: { OrderItem, OrderCancel, OrderLogistic },
   setup () {
@@ -100,21 +114,7 @@ export default {
         })
       })
     }
-    const onConfirmOrder = (order) => {
-      ElMessageBox.confirm('您确认收到货吗？确认后货款将会打给卖家', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        confirmOrder(order.id).then(() => {
-          order.orderState = 4
-          ElMessage({
-            type: 'success',
-            message: '确认收货成功!'
-          })
-        })
-      })
-    }
+
     const logisticDom = ref(null)
     const onLogisticOrder = (order) => {
       logisticDom.value.open(order)

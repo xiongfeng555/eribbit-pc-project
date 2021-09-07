@@ -20,7 +20,7 @@
       </template>
       <!-- 待收货 -->
       <template v-if="order.orderState === 3">
-        <XtxButton type="primary" size="small">确认收货</XtxButton>
+        <XtxButton type="primary" size="small" @click="onConfirmOrder(order)">确认收货</XtxButton>
         <XtxButton type="plain" size="small">再次购买</XtxButton>
       </template>
       <!-- 待评价 -->
@@ -45,6 +45,8 @@
 <script>
 import { orderStatus } from '@/api/constants'
 import OrderCancel from './order-cancel.vue'
+import { onConfirmOrder } from '../index.vue'
+
 import { ref } from 'vue'
 export default {
   name: 'OrderDetailAction',
@@ -60,7 +62,7 @@ export default {
     const cancel = () => {
       orderCancel.value.open(props.order)
     }
-    return { orderCancel, cancel, orderStatus }
+    return { orderCancel, cancel, orderStatus, onConfirmOrder }
   }
 }
 </script>
