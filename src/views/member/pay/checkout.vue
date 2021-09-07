@@ -78,10 +78,10 @@
 </template>
 <script>
 import CheckoutAddress from './components/checkout-address.vue'
-import { createOrder, submitOrder } from '@/api/order'
+import { createOrder, submitOrder, findOrderRepurchase } from '@/api/order'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   name: 'XtxPayCheckoutPage',
@@ -91,10 +91,20 @@ export default {
   setup () {
     const order = ref(null)
     const router = useRouter()
-    createOrder().then((data) => {
-      order.value = data.result
-      requestParams.goods = data.result.goods.map(item => ({ skuId: item.skuId, count: item.count }))
-    })
+    const route = useRoute()
+
+    if (route.query.orderId) {
+      findOrderRepurchase(route.query.orderId).then(data => {
+        order.value = data.result
+        requestParams.goods = data.result.goods.map(item => ({ skuId: item.skuId, count: item.count }))
+      })
+    } else {
+      createOrder().then((data) => {
+        order.value = data.result
+        requestParams.goods = data.result.goods.map(item => ({ skuId: item.skuId, count: item.count }))
+      })
+    }
+
     // 需要提交的字段
     const requestParams = reactive({
       addressId: null,

@@ -59,7 +59,7 @@
         <XtxButton v-if="order.orderState===3" type="primary" size="small" @click="$emit('confirm-order',order)">确认收货</XtxButton>
         <p><a href="javascript:;" @click="$router.push(`/member/order/${order.id}`)">查看详情</a></p>
         <p v-if="order.orderState===1"><a href="javascript:;" @click="$emit('cancel-order',order)">取消订单</a></p>
-        <p v-if="[2,3,4,5].includes(order.orderState)"><a href="javascript:;">再次购买</a></p>
+        <p v-if="[2,3,4,5].includes(order.orderState)"><a href="javascript:;" @click="$router.push(`/member/checkout?orderId=${order.id}`)">再次购买</a></p>
         <p v-if="[4,5].includes(order.orderState)"><a href="javascript:;">申请售后</a></p>
       </div>
     </div>
