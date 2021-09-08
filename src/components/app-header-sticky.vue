@@ -14,11 +14,13 @@
 <script>
 import AppHeaderNav from './app-header-nav.vue'
 import { useWindowScroll } from '@vueuse/core'
+
 export default {
   name: 'AppHeaderSticky',
   components: { AppHeaderNav },
   setup () {
     const { y } = useWindowScroll()
+
     return { y }
   }
 }

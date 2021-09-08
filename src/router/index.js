@@ -80,6 +80,7 @@ const router = createRouter({
   }
 })
 
+// 登录拦截
 router.beforeEach((to, from, next) => {
   const { profile } = store.state.user
   if (!profile.token && to.path.startsWith('/member')) {

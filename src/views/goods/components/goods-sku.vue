@@ -35,6 +35,7 @@ const getPathMap = (skus) => {
       const specs = sku.specs.map(item => item.valueName)
       // 使用幂函数获取子集
       const powerSet = PowerSet(specs)
+      console.log(powerSet)
       powerSet.forEach(set => {
         const key = set.join(spliter)
         if (pathMap[key]) {
@@ -64,7 +65,6 @@ const updateDisabledStatus = (specs, pathMap) => {
       if (val.name === isSelected[i]) return false
       isSelected[i] = val.name
       const key = isSelected.filter(value => value).join(spliter)
-      console.log(key)
       val.disabled = !pathMap[key]
     })
   })
@@ -94,8 +94,10 @@ export default {
     }
   },
   setup (props, { emit }) {
+    console.log(props.goods)
     // 初始化默认选择sku
     initDefaultSelected(props.goods, props.skuId)
+    // 得到路径字典：键值：每种规格名字组合，名：对应的skuId
     const pathMap = getPathMap(props.goods.skus)
     // 更新禁止状态
     updateDisabledStatus(props.goods.specs, pathMap)

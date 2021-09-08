@@ -15,7 +15,7 @@
       ></a>
     </template>
     <div class="box" ref="target">
-      <transition name="fade">
+
         <ul
           class="list"
           :style="{ transform: `translate(${-index * 1240}px)` }"
@@ -38,7 +38,7 @@
             height="305px"
           />
         </div>
-      </transition>
+
     </div>
   </HomePanel>
 </template>

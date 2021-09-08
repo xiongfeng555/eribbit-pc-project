@@ -52,6 +52,7 @@ import { ElMessage } from 'element-plus'
 import { addAddress, editAddress } from '@/api/order'
 export default {
   name: 'CheckoutEdit',
+  emits: ['changeEdit'],
   setup (props, { emit }) {
     const dialogFormVisible = ref(false)
     const open = (address) => {
@@ -84,7 +85,6 @@ export default {
       fullLocation: ''
     })
     const changeCity = (result) => {
-      console.log(result)
       formData.provinceCode = result.provinceCode
       formData.cityCode = result.cityCode
       formData.countyCode = result.countryCode

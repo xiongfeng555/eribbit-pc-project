@@ -19,7 +19,9 @@ module.exports = {
     // 这个是给webpack-dev-server开启可IP和域名访问权限。
     config.devServer.disableHostCheck(true)
   },
-  // 这个是设置外部扩展，模块为qc变量名为QC，导入qc将不做打包。
+  // 这个是设置外部扩展，模块为qc,变量名为QC，导入qc将不做打包。
+
+  // 冒号左边的是我们引入资源时对应的名字，冒号右面的是由库的主人暴露出来的全局方法名
   configureWebpack: {
     externals: {
       qc: 'QC'

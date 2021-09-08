@@ -1,7 +1,12 @@
 <template>
   <div class="home-category" @mouseleave="categoryId = null">
     <ul class="menu">
-      <li v-for="item in menuList" :key="item.id" @mouseenter="categoryId=item.id" :class="{active:categoryId === item.id}">
+      <li
+        v-for="item in menuList"
+        :key="item.id"
+        @mouseenter="categoryId = item.id"
+        :class="{ active: categoryId === item.id }"
+      >
         <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         <template v-if="item.children">
           <RouterLink
@@ -12,40 +17,46 @@
           >
         </template>
         <template v-else>
-           <xtx-skeleton width="60px" height="18px" bg="rgba(255,255,255,.2)" style="margin-right:5px"/>
-           <xtx-skeleton width="60px" height="18px" bg="rgba(255,255,255,.2)"/>
+          <xtx-skeleton
+            width="60px"
+            height="18px"
+            bg="rgba(255,255,255,.2)"
+            style="margin-right: 5px"
+          />
+          <xtx-skeleton width="60px" height="18px" bg="rgba(255,255,255,.2)" />
         </template>
-
       </li>
     </ul>
 
-        <!-- 弹层 -->
+    <!-- 弹层 -->
     <div class="layer">
       <h4>分类推荐 <small>根据您的购买或浏览记录推荐</small></h4>
       <ul v-if="categoryGoods && categoryGoods.goods">
         <li v-for="item in categoryGoods.goods" :key="item.id">
           <RouterLink to="/">
-            <img :src="item.picture" alt="">
+            <img :src="item.picture" alt="" />
             <div class="info">
-              <p class="name ellipsis-2">{{item.name}}</p>
-              <p class="desc ellipsis">{{item.dec}}</p>
-              <p class="price"><i>¥</i>{{item.price}}</p>
+              <p class="name ellipsis-2">{{ item.name }}</p>
+              <p class="desc ellipsis">{{ item.dec }}</p>
+              <p class="price"><i>¥</i>{{ item.price }}</p>
             </div>
           </RouterLink>
         </li>
       </ul>
       <ul v-if="categoryGoods && categoryGoods.brands">
-  <li class="brand" v-for="i in categoryGoods.brands" :key="i.id">
-    <RouterLink to="/">
-      <img :src="i.picture" alt="">
-      <div class="info">
-        <p class="place"><i class="iconfont icon-dingwei"></i>{{i.place}}</p>
-        <p class="name ellipsis">{{i.name}}</p>
-        <p class="desc ellipsis-2">{{i.desc}}</p>
-      </div>
-    </RouterLink>
-  </li>
-</ul>
+        <li class="brand" v-for="i in categoryGoods.brands" :key="i.id">
+          <RouterLink to="/">
+            <img :src="i.picture" alt="" />
+            <div class="info">
+              <p class="place">
+                <i class="iconfont icon-dingwei"></i>{{ i.place }}
+              </p>
+              <p class="name ellipsis">{{ i.name }}</p>
+              <p class="desc ellipsis-2">{{ i.desc }}</p>
+            </div>
+          </RouterLink>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -79,10 +90,10 @@ export default {
     })
     const categoryId = ref(null)
     const categoryGoods = computed(() => {
-      return menuList.value.find(item => item.id === categoryId.value)
+      return menuList.value.find((item) => item.id === categoryId.value)
     })
     // 获取品牌数据
-    findBrand().then(data => {
+    findBrand().then((data) => {
       branch.brands = data.result
     })
     return {
@@ -107,7 +118,8 @@ export default {
       height: 50px;
       line-height: 50px;
       position: relative;
-      &:hover,&.active {
+      &:hover,
+      &.active {
         background: $xtxColor;
       }
       a {
@@ -117,19 +129,18 @@ export default {
           font-size: 16px;
         }
       }
-    //    .el-skeleton{
-    //     position:absolute;
-    //     top: 4px;
-    //     left: 94px;
-    //     width: 150%;
-    // }
+      //    .el-skeleton{
+      //     position:absolute;
+      //     top: 4px;
+      //     left: 94px;
+      //     width: 150%;
+      // }
     }
-
   }
-    .layer {
+  .layer {
     width: 990px;
     height: 500px;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.8);
     position: absolute;
     left: 250px;
     top: 0;
@@ -168,8 +179,8 @@ export default {
             background: #e3f9f4;
           }
           img {
-              width: 95px;
-              height: 95px;
+            width: 95px;
+            height: 95px;
           }
           .info {
             padding-left: 10px;
@@ -192,7 +203,7 @@ export default {
           }
         }
       }
-       li.brand {
+      li.brand {
         height: 180px;
         a {
           align-items: flex-start;

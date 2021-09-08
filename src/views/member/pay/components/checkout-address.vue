@@ -45,7 +45,6 @@ export default {
   },
   emits: ['change'],
   setup (props, { emit }) {
-    console.log(props.list)
     const showAddress = ref(null)
     const addressDefault = props.list.find(item => item.isDefault === 1)
     if (addressDefault) {
@@ -71,7 +70,6 @@ export default {
     const changeEdit = (formData) => {
       const index = props.list.findIndex(item => item.id === formData.id)
       if (index > -1) {
-        console.log(formData)
         showAddress.value = formData
       } else {
         const data = JSON.stringify(formData)
